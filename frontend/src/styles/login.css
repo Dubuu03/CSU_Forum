@@ -33,14 +33,6 @@ body {
   width: 100%;
   text-align: right;
 }
-.back-button {
-  width: 20px;
-  height: auto;
-  cursor: pointer;
-  position: absolute;
-  left: 20px;
-  top: 50px;
-}
 
 .description {
   color: #9d0208;
@@ -49,8 +41,14 @@ body {
   font-size: 12px;
   margin-bottom: 15px;
 }
+.csu-red {
+  color: #9d0208;
+}
 
-hr {
+.csu-yellow {
+  color: #faa307;
+}
+.divider {
   height: 2px;
   background-color: #9d0208;
   border: none;
@@ -62,9 +60,9 @@ hr {
   padding: 20px;
 }
 
-label {
+.form-label {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   text-align: left;
   padding-left: 10px;
 }
@@ -98,7 +96,7 @@ label {
   text-align: center;
   color: #9d0208;
 }
-input {
+.form-input {
   width: 100%;
   padding: 10px 15px;
   margin: 10px 0;
@@ -109,13 +107,28 @@ input {
   outline: none;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .button-container {
   display: flex;
   justify-content: center;
 }
 
-button {
+.btnSubmit {
   width: 95%;
   margin: 10px auto 0 auto;
   padding: 10px;

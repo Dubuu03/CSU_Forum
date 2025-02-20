@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import authService from "../services/authService";
+import { Eye, EyeOff } from "lucide-react";
+import authService, { AuthenticationError } from "../services/authService";
+import useTogglePassword from "../hooks/useTogglePassword";
 import "../styles/login.css";
 import gate from "../assets/gate.jpg";
 import logo from "../assets/csulogo.png";
 import eagle from "../assets/eagle.png";
-import back from "../assets/back.png";
-
+import BtnBack from "../components/BtnBack";
 
 const Login = () => {
     const [formData, setFormData] = useState({ id: "", password: "" });
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const { showPassword, togglePasswordVisibility } = useTogglePassword();
 
     const navigate = useNavigate();
 
@@ -19,42 +21,47 @@ const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
+
         try {
             const data = await authService.login(formData);
+
             if (data.access_token) {
                 localStorage.setItem("accessToken", data.access_token);
                 setSuccess("Login successful!");
                 navigate("/dashboard");
             }
         } catch (err) {
-            if (err.message === "invalid_credentials") {
-                setError("Invalid user credentials. Please try again.");
+            if (err instanceof AuthenticationError) {
+                if (err.status === 401) {
+                    setError("Invalid user credentials. Please try again.");
+                } else if (err.status === 403) {
+                    setError("Currently offline. Please try again later.");
+                } else {
+                    setError("Login failed. Please try again.");
+                }
             } else {
-                setError("An error occurred.");
+                setError("An unexpected error occurred. Please try again later.");
             }
-
         }
     };
+
 
     return (
         <div className="login">
             <div className="head">
-                <img
-                    src={back}
-                    alt="Back"
-                    className="back-button"
-                    onClick={() => window.history.back()}
-                />
+                <BtnBack />
+
                 <h2 className="head-title">
-                    <span style={{ color: "#9d0208" }}>CSU</span>
-                    <span style={{ color: "#FAA307" }}>nite</span>
+                    <span className="csu-red">CSU</span>
+                    <span className="csu-yellow">nite</span>
                 </h2>
                 <p className="description">Cagayan State University - Carig Campus</p>
-                <hr />
+                <hr className="divider" />
             </div>
 
             <div className="form-container">
@@ -65,8 +72,9 @@ const Login = () => {
 
                 <h2 className="title">Welcome, Agila!</h2>
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="id">Student ID:</label>
+                    <label htmlFor="id" className="form-label">Student ID:</label>
                     <input
+                        className="form-input"
                         type="text"
                         name="id"
                         placeholder="Student ID"
@@ -74,19 +82,25 @@ const Login = () => {
                         onChange={handleChange}
                         required
                     />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
+                    <label htmlFor="password" className="form-label">Password:</label>
+                    <div className="password-input-container">
+                        <input
+                            className="form-input"
+                            value={formData.password}
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            onChange={handleChange}
+                            required
+                        />
+                        <div className="password-toggle-icon" onClick={togglePasswordVisibility}>
+                            {showPassword ? <EyeOff size={20} color="#666" /> : <Eye size={20} color="#666" />}
+                        </div>
+                    </div>
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                     <div className="button-container">
-                        <button type="submit">Login</button>
+                        <button type="submit" className="btnSubmit">Login</button>
                     </div>
                 </form>
 

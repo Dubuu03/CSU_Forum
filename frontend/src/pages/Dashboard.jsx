@@ -70,7 +70,6 @@ const Dashboard = () => {
                 >
                     {avatarText}
                 </div>
-
                 <p><strong>ID Number:</strong> {profile.IDNumber}</p>
                 <p><strong>Last Name:</strong> {profile.LastName}</p>
                 <p><strong>First Name:</strong> {profile.FirstName}</p>
