@@ -1,0 +1,160 @@
+/* General styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+body {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Login container */
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 150px;
+}
+
+.head {
+  color: white;
+  padding: 30px 30px 10px 30px;
+  width: 100%;
+  text-align: right;
+}
+.back-button {
+  width: 20px;
+  height: auto;
+  cursor: pointer;
+  position: absolute;
+  left: 20px;
+  top: 50px;
+}
+
+.description {
+  color: #9d0208;
+  width: 100%;
+  text-align: right;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+hr {
+  height: 2px;
+  background-color: #9d0208;
+  border: none;
+}
+
+/* Form container */
+.form-container {
+  width: 100%;
+  padding: 20px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.logo-container {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+  display: block;
+}
+
+.eagle {
+  width: 150px;
+  height: auto;
+  display: block;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-buttom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin: 50px 0 30px 0;
+  text-align: center;
+  color: #9d0208;
+}
+input {
+  width: 100%;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 1px solid #9d0208;
+  border-radius: 30px;
+  font-size: 14px;
+  text-align: left;
+  outline: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  width: 95%;
+  margin: 10px auto 0 auto;
+  padding: 10px;
+  background: #9d0208;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  margin: 10px auto 0 10px;
+  font-size: 14px;
+}
+/* Success message */
+.success-message {
+  color: green;
+  margin: 10px auto 0 10px;
+  font-size: 14px;
+}
+
+/* Gate image */
+.gate-container {
+  width: 100vw;
+  position: fixed;
+  bottom: -10px;
+  left: 0;
+  z-index: -1;
+}
+
+.gate {
+  width: 100%;
+  height: 100%;
+  transform: scale(2.2);
+  transform-origin: bottom center;
+}

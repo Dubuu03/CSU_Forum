@@ -1,4 +1,5 @@
 const LOGIN_ENDPOINT = "https://takay.csucarig.edu.ph/auth/login";
+const LOGOUT_ENDPOINT = "https://takay.csucarig.edu.ph/auth/logout";
 
 export class AuthenticationError extends Error {
     constructor(message) {
@@ -34,7 +35,22 @@ const authService = {
     /**
      * Logs out the user by removing the access token from storage.
      */
-    logout() {
+    async logout() {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+            window.location.href = "/login";
+            return;
+        }
+
+        try {
+            await fetch(LOGOUT_ENDPOINT, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+        } catch (error) {
+            console.error("Logout request failed", error);
+        }
+
         localStorage.removeItem("accessToken");
         window.location.href = "/login";
     },
