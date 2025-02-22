@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import authService, { AuthenticationError } from "../services/authService";
-import useTogglePassword from "../hooks/useTogglePassword";
+import useTogglePassword from "../hooks/Auth/useTogglePassword";
 import "../styles/login.css";
 import gate from "../assets/gate.jpg";
 import logo from "../assets/csulogo.png";
 import logov3 from "../assets/logov3.png";
 import eagle from "../assets/eagle.png";
 import BtnBack from "../components/BtnBack";
+
 
 const Login = () => {
     const [formData, setFormData] = useState({ id: "", password: "" });

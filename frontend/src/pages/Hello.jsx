@@ -1,8 +1,8 @@
 import React from 'react';
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
-import useFormattedName from "../hooks/useFormattedName";
+import useFormattedName from "../hooks/Profile/useFormattedName";
 import authService from "../services/authService";
-import useAuthRedirect from "../hooks/useAuthRedirect";
+import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 
 const Hello = () => {
     const accessToken = useAuthRedirect();

@@ -8,8 +8,6 @@ export class AuthenticationError extends Error {
     }
 }
 
-
-
 const authService = {
     /**
      * Logs in the user using the provided credentials.

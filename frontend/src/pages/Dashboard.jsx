@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthRedirect from "../hooks/useAuthRedirect";
+import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentCourse from "../hooks/Profile/useStudentCourse";
 import useStudentCollege from "../hooks/Profile/useStudentCollege";
@@ -8,7 +8,7 @@ import authService from "../services/authService";
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const accessToken = useAuthRedirect(); 
+    const accessToken = useAuthRedirect();
 
     const { profile, loading: profileLoading, error: profileError } = useStudentProfile(accessToken);
     const { course, loading: courseLoading, error: courseError } = useStudentCourse(accessToken);
@@ -52,6 +52,7 @@ const Dashboard = () => {
                 >
                     {avatarText}
                 </div>
+
                 <p><strong>ID Number:</strong> {profile.IDNumber}</p>
                 <p><strong>Last Name:</strong> {profile.LastName}</p>
                 <p><strong>First Name:</strong> {profile.FirstName}</p>

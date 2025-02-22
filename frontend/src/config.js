@@ -4,6 +4,7 @@ const CONFIG = {
     STUDENT_COLLEGE_ENDPOINT: import.meta.env.VITE_STUDENT_COLLEGE_ENDPOINT,
     LOGIN_ENDPOINT: import.meta.env.VITE_LOGIN_ENDPOINT ,
     LOGOUT_ENDPOINT: import.meta.env.VITE_LOGOUT_ENDPOINT ,
+    API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
 };
 
 export default CONFIG;

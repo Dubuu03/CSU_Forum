@@ -1,15 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import back from "../assets/back.png";
+import { ChevronLeft } from "lucide-react";
 
 const BtnBack = () => {
     const navigate = useNavigate();
+
     return (
-        <img
-            src={back}
-            alt="Back"
+        <ChevronLeft
+            size={24}
+            color="#333"
             style={{
-                width: "20px",
-                height: "auto",
                 cursor: "pointer",
                 position: "absolute",
                 left: "20px",
