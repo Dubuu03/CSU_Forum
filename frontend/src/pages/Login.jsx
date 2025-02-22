@@ -6,6 +6,7 @@ import useTogglePassword from "../hooks/useTogglePassword";
 import "../styles/login.css";
 import gate from "../assets/gate.jpg";
 import logo from "../assets/csulogo.png";
+import logov3 from "../assets/logov3.png";
 import eagle from "../assets/eagle.png";
 import BtnBack from "../components/BtnBack";
 
@@ -37,18 +38,14 @@ const Login = () => {
             }
         } catch (err) {
             if (err instanceof AuthenticationError) {
-                if (err.status === 401) {
-                    setError("Invalid user credentials. Please try again.");
-                } else if (err.status === 403) {
-                    setError("Currently offline. Please try again later.");
-                } else {
-                    setError("Login failed. Please try again.");
-                }
+                setError(err.message);
             } else {
                 setError("An unexpected error occurred. Please try again later.");
             }
         }
     };
+
+
 
 
     return (
@@ -66,7 +63,7 @@ const Login = () => {
 
             <div className="form-container">
                 <div className="logo-container">
-                    <img src={logo} alt="CSU Logo" className="logo" />
+                    <img src={logov3} alt="CSU Logo" className="logo" />
                     <img src={eagle} alt="Eagle" className="eagle" />
                 </div>
 
@@ -77,7 +74,7 @@ const Login = () => {
                         className="form-input"
                         type="text"
                         name="id"
-                        placeholder="Student ID"
+                        placeholder="Enter Student ID"
                         value={formData.id}
                         onChange={handleChange}
                         required
@@ -89,7 +86,7 @@ const Login = () => {
                             value={formData.password}
                             type={showPassword ? "text" : "password"}
                             name="password"
-                            placeholder="Password"
+                            placeholder="Enter Password"
                             onChange={handleChange}
                             required
                         />
@@ -97,10 +94,16 @@ const Login = () => {
                             {showPassword ? <EyeOff size={20} color="#666" /> : <Eye size={20} color="#666" />}
                         </div>
                     </div>
+
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
+
                     <div className="button-container">
-                        <button type="submit" className="btnSubmit">Login</button>
+                        <button
+                            type="submit"
+                            className={`btnSubmit ${error || success ? "adjust-margin" : ""}`}>
+                            Login
+                        </button>
                     </div>
                 </form>
 

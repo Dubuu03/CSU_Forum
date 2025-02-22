@@ -1,40 +1,23 @@
-import React, { useEffect, useState } from "react";
-import profileService from "../services/profileService";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import useAuthRedirect from "../hooks/useAuthRedirect";
+import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import useStudentCourse from "../hooks/Profile/useStudentCourse";
+import useStudentCollege from "../hooks/Profile/useStudentCollege";
 import authService from "../services/authService";
 
 const Dashboard = () => {
-    const [profile, setProfile] = useState(null);
-    const [course, setCourse] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const accessToken = useAuthRedirect(); 
 
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            try {
-                const accessToken = localStorage.getItem("accessToken");
-                if (!accessToken) throw new Error("No access token found");
+    const { profile, loading: profileLoading, error: profileError } = useStudentProfile(accessToken);
+    const { course, loading: courseLoading, error: courseError } = useStudentCourse(accessToken);
+    const { college, loading: collegeLoading, error: collegeError } = useStudentCollege(accessToken);
 
-                // Fetch student profile
-                const studentProfile = await profileService.getBasicProfile(accessToken);
-                setProfile(studentProfile);
+    if (profileLoading || courseLoading || collegeLoading) return <p>Loading profile...</p>;
+    if (profileError || courseError || collegeError)
+        return <p style={{ color: "red" }}>Error: {profileError || courseError || collegeError}</p>;
 
-                // Fetch student course
-                const studentCourse = await profileService.getCourse(accessToken);
-                setCourse(studentCourse);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProfileData();
-    }, []);
-
-    if (loading) return <p>Loading profile...</p>;
-    if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
-
-    // Generate the profile avatar text (first letter of the first name)
     const avatarText = profile?.FirstName?.charAt(0).toUpperCase() || "?";
 
     return (
@@ -42,7 +25,7 @@ const Dashboard = () => {
             <h1>Dashboard</h1>
             <div
                 style={{
-                    backgroundColor: profile.CollegeColor,
+                    backgroundColor: college.color,
                     padding: "15px",
                     borderRadius: "10px",
                     color: "#fff",
@@ -52,7 +35,6 @@ const Dashboard = () => {
             >
                 <h2>Student Profile</h2>
 
-                {/* Profile Picture (First Letter of First Name) */}
                 <div
                     style={{
                         width: "100px",
@@ -73,12 +55,17 @@ const Dashboard = () => {
                 <p><strong>ID Number:</strong> {profile.IDNumber}</p>
                 <p><strong>Last Name:</strong> {profile.LastName}</p>
                 <p><strong>First Name:</strong> {profile.FirstName}</p>
-                <p><strong>Middle Name:</strong> {profile.MiddleName || "N/A"}</p>
-                <p><strong>College:</strong> {profile.College}</p>
-                <p><strong>Course:</strong> {course || "Not Available"}</p>
+                <p><strong>Middle Name:</strong> {profile.MiddleName}</p>
+                <p><strong>College:</strong> {college.label}</p>
+                <p><strong>Course:</strong> {course}</p>
             </div>
             <br />
-            <button onClick={() => authService.logout()}>Logout</button>
+            <button onClick={() => {
+                authService.logout();
+                navigate("/login"); // Redirect to login on logout
+            }}>
+                Logout
+            </button>
         </div>
     );
 };

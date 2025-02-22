@@ -1,12 +1,13 @@
-const LOGIN_ENDPOINT = "https://takay.csucarig.edu.ph/auth/login";
-const LOGOUT_ENDPOINT = "https://takay.csucarig.edu.ph/auth/logout";
+import CONFIG from "../config";
 
 export class AuthenticationError extends Error {
-    constructor(message) {
+    constructor(message, status) {
         super(message);
         this.name = "AuthenticationError";
+        this.status = status;
     }
 }
+
 
 
 const authService = {
@@ -17,19 +18,29 @@ const authService = {
      * @throws {AuthenticationError} - If login fails.
      */
     async login({ id, password }) {
-        const res = await fetch(LOGIN_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ UserID: id, Password: password }),
-        });
+        try {
+            const res = await fetch(CONFIG.LOGIN_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ UserID: id, Password: password }),
+            });
 
-        if (!res.ok) {
-            const errorData = await res.json();
-            throw new AuthenticationError(errorData.error || "Invalid credentials");
+            if (!res.ok) {
+                const errorData = await res.json();
+                switch (res.status) {
+                    case 401:
+                        throw new AuthenticationError("Invalid credentials. Please try again.", 401);
+                    case 403:
+                        throw new AuthenticationError("Currently offline. Please try again later.", 403);
+                    default:
+                        throw new AuthenticationError(errorData.error || "Login failed.", res.status);
+                }
+            }
+
+            return await res.json(); // { access_token, token_type, expires_in }
+        } catch (error) {
+            throw error instanceof AuthenticationError ? error : new AuthenticationError("An unexpected error occurred. Please try again later.");
         }
-
-        const data = await res.json();
-        return data; // { access_token, token_type, expires_in }
     },
 
     /**
@@ -43,7 +54,7 @@ const authService = {
         }
 
         try {
-            await fetch(LOGOUT_ENDPOINT, {
+            await fetch(CONFIG.LOGOUT_ENDPOINT, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${accessToken}` },
             });

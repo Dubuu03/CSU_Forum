@@ -61,7 +61,7 @@ body {
 }
 
 .form-label {
-  font-weight: bold;
+  font-weight: semi-bold;
   font-size: 14px;
   text-align: left;
   padding-left: 10px;
@@ -74,7 +74,7 @@ body {
 }
 
 .logo {
-  width: 50px;
+  width: 55px;
   height: auto;
   display: block;
 }
@@ -84,7 +84,7 @@ body {
   height: auto;
   display: block;
   position: absolute;
-  top: 15px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   margin-buttom: 20px;
@@ -95,11 +95,12 @@ body {
   margin: 50px 0 30px 0;
   text-align: center;
   color: #9d0208;
+  font-weight: 600;
 }
 .form-input {
   width: 100%;
   padding: 10px 15px;
-  margin: 10px 0;
+  margin: 0px 0 10px 0;
   border: 1px solid #9d0208;
   border-radius: 30px;
   font-size: 14px;
@@ -115,7 +116,7 @@ body {
 .password-toggle-icon {
   position: absolute;
   right: 15px;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   cursor: pointer;
   display: flex;
@@ -129,8 +130,8 @@ body {
 }
 
 .btnSubmit {
-  width: 95%;
-  margin: 10px auto 0 auto;
+  width: 100%;
+  margin: 40px auto 0 auto;
   padding: 10px;
   background: #9d0208;
   color: white;
@@ -141,6 +142,10 @@ body {
   transition: background 0.3s ease;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   display: block;
+}
+
+.adjust-margin {
+  margin-top: 10px;
 }
 
 /* Error message */
