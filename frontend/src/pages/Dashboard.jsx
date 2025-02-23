@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentCourse from "../hooks/Profile/useStudentCourse";
@@ -67,6 +67,9 @@ const Dashboard = () => {
             }}>
                 Logout
             </button>
+
+            <p><Link to="/createcommunity">Go to Create Community</Link></p>
+            <p><Link to="/community">Go to Community</Link></p>
         </div>
     );
 };

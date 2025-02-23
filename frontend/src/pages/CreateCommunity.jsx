@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useFormattedName from "../hooks/Profile/useFormattedName";
+import authService from "../services/authService";
 import { createCommunity, fetchUserCommunities } from "../services/communityService";
 
 const CreateCommunity = () => {
@@ -118,6 +119,10 @@ const CreateCommunity = () => {
                         <input type="text" name="tags" placeholder="Tags (comma separated)" value={communityData.tags} onChange={handleChange} style={styles.input} />
                         <button type="submit" style={styles.button}>Create</button>
                     </form>
+
+                    <button onClick={() => authService.logout()} style={styles.button}>Logout</button>
+                    <p><Link to="/dashboard">Go to Dashboard</Link></p>
+                    <p><Link to="/createcommunity">Go to Create Community</Link></p>
                 </>
             )}
         </div>

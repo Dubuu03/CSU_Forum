@@ -86,12 +86,93 @@ export const deleteCommunity = async (accessToken, communityId) => {
     }
 };
 
+// Get all communities a student is a member of
 export const fetchUserCommunities = async (studentId) => {
     try {
-        const res = await fetch(`${CONFIG.API_BASE_URL}/api/communities/user/${studentId}`);
+        const res = await fetch(`${API_URL}/user/${studentId}`);
         return await res.json();
     } catch (error) {
         console.error("Error fetching user's communities:", error);
         throw error;
     }
 };
+
+// Get all approved communities the user has NOT joined
+export const fetchUnjoinedCommunities = async (studentId) => {
+    if (!studentId) {
+        throw new Error("Student ID is required");
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/unjoined/${studentId}`);
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const communities = await res.json();
+
+        // Additional client-side verification
+        return communities.filter(community =>
+            !community.memberIds.includes(String(studentId))
+        );
+    } catch (error) {
+        console.error("Error fetching unjoined communities:", error);
+        throw error;
+    }
+};
+
+// Join a community
+export const joinCommunity = async (accessToken, studentId, communityId) => {
+    try {
+        console.log("Sending join request:", { studentId, communityId });
+
+        const res = await fetch(`${API_URL}/join`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ studentId, communityId }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to join community");
+        }
+
+        console.log("Join response:", data);
+        return data;
+    } catch (error) {
+        console.error("Error joining community:", error);
+        throw error;
+    }
+};
+
+// Leave a community
+export const leaveCommunity = async (accessToken, studentId, communityId) => {
+    try {
+        console.log("Sending leave request:", { studentId, communityId });
+
+        const res = await fetch(`${API_URL}/leave`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ studentId, communityId }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to leave community");
+        }
+
+        console.log("Leave response:", data);
+        return data;
+    } catch (error) {
+        console.error("Error leaving community:", error);
+        throw error;
+    }
+};
+

@@ -5,8 +5,9 @@ const communitySchema = new mongoose.Schema({
     description: { type: String, required: true },
     creatorId: { type: String, required: true },
     creatorName: { type: String, required: true },
-    tags: [{ type: String }],
-    memberIds: [{ type: String, required: true }], // Store student IDs of all members
+    image: { type: String }, // Optional image URL
+    tags: [{ type: String }], // Optional tags
+    memberIds: { type: [String], default: [] }, // Ensure it's always an array, defaulting to empty
     discussions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Discussion" }],
     isApproved: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
