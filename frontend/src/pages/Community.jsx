@@ -1,78 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { fetchUnjoinedCommunities, fetchUserCommunities, joinCommunity, leaveCommunity } from "../services/communityService";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import authService from "../services/authService";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import useCommunities from "../hooks/Community/useCommunities";
 
 const Communities = () => {
     const accessToken = useAuthRedirect();
     const { profile, loading: profileLoading, error: profileError } = useStudentProfile(accessToken);
-    const [unjoinedCommunities, setUnjoinedCommunities] = useState([]);
-    const [userCommunities, setUserCommunities] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [joiningStates, setJoiningStates] = useState({});
-    const [leavingStates, setLeavingStates] = useState({});
-
-    const loadCommunities = async () => {
-        if (!profile?.IDNumber) return;
-        setLoading(true);
-        try {
-            const unjoinedData = await fetchUnjoinedCommunities(profile.IDNumber);
-            const userData = await fetchUserCommunities(profile.IDNumber);
-
-            setUnjoinedCommunities(unjoinedData);
-            setUserCommunities(userData);
-        } catch (err) {
-            setError("Failed to fetch communities. Please try again later.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        loadCommunities();
-    }, [profile]);
-
-    const handleJoinCommunity = async (communityId) => {
-        if (!profile?.IDNumber) return;
-
-        setJoiningStates(prev => ({ ...prev, [communityId]: true }));
-        setError(null);
-
-        try {
-            await joinCommunity(accessToken, profile.IDNumber, communityId);
-            await loadCommunities();
-        } catch (err) {
-            setError(`Failed to join community. ${err.message || 'Please try again.'}`);
-        } finally {
-            setJoiningStates(prev => ({ ...prev, [communityId]: false }));
-        }
-    };
-
-    const handleLeaveCommunity = async (communityId, creatorId) => {
-        if (!profile?.IDNumber) return;
-
-        // Prevent owner from leaving their own community
-        if (profile.IDNumber === creatorId) {
-            setError("You cannot leave a community you own.");
-            return;
-        }
-
-        setLeavingStates(prev => ({ ...prev, [communityId]: true }));
-        setError(null);
-
-        try {
-            await leaveCommunity(accessToken, profile.IDNumber, communityId);
-            await loadCommunities();
-        } catch (err) {
-            setError(`Failed to leave community. ${err.message || 'Please try again.'}`);
-        } finally {
-            setLeavingStates(prev => ({ ...prev, [communityId]: false }));
-        }
-    };
-
+    const {
+        unjoinedCommunities,
+        userCommunities,
+        loading,
+        error,
+        joiningStates,
+        leavingStates,
+        handleJoinCommunity,
+        handleLeaveCommunity
+    } = useCommunities(profile, accessToken);
 
     if (profileLoading || (loading && profile)) {
         return <div style={{ textAlign: "center", fontSize: "18px", color: "#555" }}>Loading...</div>;
@@ -98,8 +43,7 @@ const Communities = () => {
                             <p style={{ color: "#666", fontSize: "14px" }}>{community.description}</p>
                             <p style={{ color: "#888", fontSize: "12px" }}>Owner: {community.creatorName}</p>
                             <button
-                                onClick={() => handleLeaveCommunity(community._id, community.creatorId)}
-                                disabled={leavingStates[community._id] || profile.IDNumber === community.creatorId}
+                                disabled={profile.IDNumber === community.creatorId}
                                 style={{
                                     padding: "8px 12px",
                                     backgroundColor: profile.IDNumber === community.creatorId ? "#6c757d" : "#dc3545",
@@ -109,10 +53,14 @@ const Communities = () => {
                                     cursor: profile.IDNumber === community.creatorId ? "not-allowed" : "pointer",
                                     fontSize: "14px"
                                 }}
+                                onClick={profile.IDNumber !== community.creatorId ? () => {
+                                    if (window.confirm("Are you sure you want to leave this community?")) {
+                                        handleLeaveCommunity(community._id);
+                                    }
+                                } : undefined}
                             >
-                                {profile.IDNumber === community.creatorId ? "Owner" : leavingStates[community._id] ? "Leaving..." : "Leave"}
+                                {profile.IDNumber === community.creatorId ? "Owner" : (leavingStates[community._id] ? "Leaving..." : "Leave")}
                             </button>
-
                         </li>
                     ))}
                 </ul>
@@ -128,13 +76,22 @@ const Communities = () => {
                             <strong style={{ fontSize: "18px", color: "#333" }}>{community.name}</strong>
                             <p style={{ color: "#666", fontSize: "14px" }}>{community.description}</p>
                             <p style={{ color: "#888", fontSize: "12px" }}>Owner: {community.creatorName}</p>
-                            <button
-                                onClick={() => handleJoinCommunity(community._id)}
-                                disabled={joiningStates[community._id]}
-                                style={{ padding: "8px 12px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontSize: "14px" }}
-                            >
-                                {joiningStates[community._id] ? "Joining..." : "Join"}
-                            </button>
+                            {profile.IDNumber === community.creatorId ? (
+                                <button
+                                    disabled
+                                    style={{ padding: "8px 12px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "4px", fontSize: "14px" }}
+                                >
+                                    Owner
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => handleJoinCommunity(community._id)}
+                                    disabled={joiningStates[community._id]}
+                                    style={{ padding: "8px 12px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontSize: "14px" }}
+                                >
+                                    {joiningStates[community._id] ? "Joining..." : "Join"}
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>

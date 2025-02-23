@@ -122,7 +122,7 @@ const CreateCommunity = () => {
 
                     <button onClick={() => authService.logout()} style={styles.button}>Logout</button>
                     <p><Link to="/dashboard">Go to Dashboard</Link></p>
-                    <p><Link to="/createcommunity">Go to Create Community</Link></p>
+                    <p><Link to="/community">Go to Community</Link></p>
                 </>
             )}
         </div>
