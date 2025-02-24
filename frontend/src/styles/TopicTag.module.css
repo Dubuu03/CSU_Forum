@@ -9,13 +9,15 @@
 .container span {
     font-size: 1rem;
     font-weight: bold;
+    color: #98050A;
 }
 
 .topicList {
     display: flex;
     flex-wrap: wrap;
     width: 150%;
-    gap: 10px;
+    gap: 7px;
+    overflow-x: auto;
 }
 
 .topicTag {

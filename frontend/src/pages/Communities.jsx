@@ -1,6 +1,9 @@
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
 import TopicTagList from "../components/Communities/TopicTagList";
+import DiscoverCommunities from "../components/Communities/DiscoverCommunities";
+import TopCommunities from "../components/Communities/TopCommunities";
+import avatar from "../assets/default-profile.png";
 import styles from "../styles/Communities.module.css";
 
 const topics = [
@@ -9,6 +12,20 @@ const topics = [
     "Pop Culture", "News & Politics", "Technology", "Movies & TV",
     "Pop Culture"
 ];
+const communities = [
+    { image: avatar, name: "GetMotivated", members: "24.0m", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "rWritingPrompts", members: "19M", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "GetMotivated", members: "24.0m", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "rWritingPrompts", members: "19M", description: "Find the motivation you need to tackle anything life throws your way." },
+];
+
+const topCommunities = [
+    { image: avatar, name: "GetMotivated", members: "24.0m", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "rWritingPrompts", members: "19M", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "GetMotivated", members: "24.0m", description: "Find the motivation you need to tackle anything life throws your way." },
+    { image: avatar, name: "rWritingPrompts", members: "19M", description: "Find the motivation you need to tackle anything life throws your way." },
+];
+
 
 const Communities = () => {
     return (
@@ -16,7 +33,8 @@ const Communities = () => {
             <div className={styles.contentContainer}>
                 <Header />
                 <TopicTagList topics={topics} />
-
+                <DiscoverCommunities communities={communities} />
+                <TopCommunities topCommunities={topCommunities} />
             </div>
 
             <NavBar />

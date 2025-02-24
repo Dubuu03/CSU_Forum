@@ -1,0 +1,81 @@
+.communityCard {
+    display: flex;
+    justify-content: center;
+    flex-direction: column ;
+    border: 1px solid #C9C9C9;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f1f1f1;
+    gap: 10px;
+    width: 17.2rem;
+    min-height: 100px;
+}
+
+.communityInfo {
+    display: flex;
+    align-items: center;
+}
+
+.communityDetails {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.6rem;
+    position: relative;
+    top: 2px;
+}
+
+.communityDetails span {
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.desc {
+    font-size: 0.6rem;
+    color: #555;
+    text-align: justify;
+    line-height: 0.95;
+}
+
+.joinBtn {
+    margin-left: auto;
+    padding: 1px 8px;
+    border-radius: 20px;
+    border: 1px solid #434343;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    top: -5px;
+}
+
+.members {
+    position: relative;
+    top: -5px;
+}
+
+.discoverSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    gap: 0.8rem;
+}
+
+.communityList {
+    display: flex;
+    flex-wrap: wrap;
+    width: 200%;
+    gap: 7px;
+}
+
+.discoverSection span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #98050A;
+}
