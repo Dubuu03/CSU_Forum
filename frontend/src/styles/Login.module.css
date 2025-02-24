@@ -1,0 +1,153 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.top-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    position: absolute;
+    padding: 3rem 2rem;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #9D0208;
+
+}
+
+.title-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    position: relative;
+    gap: 5px;
+    margin-bottom: 0.8rem;
+}
+.logo {
+    width: 37%;
+}
+
+.subtitle {
+    position: relative;
+    font-size: 0.7rem;
+}
+
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2rem;
+}
+
+.csunite-logo {
+    width: 45%;
+}
+
+.welcome {
+    font-size: 1.3rem;
+    font-weight: regular;
+    margin: 0;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem 1.8rem;
+    border: 1px solid #9D0208;
+    border-radius: 50px;
+    box-sizing: border-box;
+    background: white; /* Make sure the input has a solid background */
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-40%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-label {
+    position: absolute;
+    left: 1.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9D0208;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+    background: white; /* Match input background */
+    padding: 0 5px; /* Ensure it doesn't overlap input text */
+}
+
+/* Move label up when input is focused or filled */
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label {
+    top: 10px; /* Move label up */
+    font-size: 0.6rem;
+    color: #9D0208;
+    
+}
+
+.error {
+    height: 2rem;
+    width: auto;
+
+}
+.submit {
+    border: none;
+    color: #fff;
+    background-color: #9D0208;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bottom-section {
+    width: 100vh;
+    height: auto;
+    max-height: 40%;
+    position: fixed;
+    bottom: 0;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+}
+
+.bottom-background {
+    object-fit: cover;
+    translate: 10px 0px;
+}

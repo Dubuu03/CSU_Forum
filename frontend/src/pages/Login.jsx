@@ -3,11 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import authService, { AuthenticationError } from "../services/authService";
 import useTogglePassword from "../hooks/Auth/useTogglePassword";
-import "../styles/login.css";
+import styles from "../styles/Login.module.css";
 import gate from "../assets/gate.jpg";
-import logo from "../assets/csulogo.png";
-import logov3 from "../assets/logov3.png";
-import eagle from "../assets/eagle.png";
+import projName from "../assets/proj-name.png";
+import csunite from '../assets/CSUnite.png';
 import BtnBack from "../components/BtnBack";
 
 
@@ -47,71 +46,58 @@ const Login = () => {
     };
 
 
-
-
     return (
-        <div className="login">
-            <div className="head">
-                <BtnBack />
-
-                <h2 className="head-title">
-                    <span className="csu-red">CSU</span>
-                    <span className="csu-yellow">nite</span>
-                </h2>
-                <p className="description">Cagayan State University - Carig Campus</p>
-                <hr className="divider" />
-            </div>
-
-            <div className="form-container">
-                <div className="logo-container">
-                    <img src={logov3} alt="CSU Logo" className="logo" />
-                    <img src={eagle} alt="Eagle" className="eagle" />
+        <div className={styles['main-container']}>
+            <div className={styles['top-section']}>
+                <div className={styles['header']}>
+                    <BtnBack />
+                    <div className={styles['title-section']}>
+                        <img className={styles['logo']} src={projName} alt="CSUnite" />
+                        <p className={styles['subtitle']}>Cagayan State University - Carig Campus</p>
+                    </div>
+                </div>
+                <div className={styles['logo-section']}>
+                    <img className={styles['csunite-logo']} src={csunite} alt="csu-logo" />
+                    <p className={styles['welcome']}>Welcome, Agila!</p>
                 </div>
 
-                <h2 className="title">Welcome, Agila!</h2>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="id" className="form-label">Student ID:</label>
-                    <input
-                        className="form-input"
-                        type="text"
-                        name="id"
-                        placeholder="Enter Student ID"
-                        value={formData.id}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label htmlFor="password" className="form-label">Password:</label>
-                    <div className="password-input-container">
+                <form onSubmit={handleSubmit} className={styles['form-container']}>
+                    <div className={styles['input-group']}>
                         <input
-                            className="form-input"
-                            value={formData.password}
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="Enter Password"
+                            type="text"
+                            className={styles['form-input']}
+                            name="id"
+                            value={formData.id}
+                            placeholder=" "
                             onChange={handleChange}
                             required
                         />
-                        <div className="password-toggle-icon" onClick={togglePasswordVisibility}>
+                        <label className={styles['form-label']}>Username</label>
+                    </div>
+                    <div className={styles['input-group']}>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className={styles['form-input']}
+                            name="password"
+                            value={formData.password}
+                            placeholder=" "
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <label className={styles['form-label']}>Password</label>
+                        <div className={styles['password-toggle-icon']} onClick={togglePasswordVisibility}>
                             {showPassword ? <EyeOff size={20} color="#666" /> : <Eye size={20} color="#666" />}
                         </div>
                     </div>
-
-                    {error && <p className="error-message">{error}</p>}
-                    {success && <p className="success-message">{success}</p>}
-
-                    <div className="button-container">
-                        <button
-                            type="submit"
-                            className={`btnSubmit ${error || success ? "adjust-margin" : ""}`}>
-                            Login
-                        </button>
+                    <div className={styles['error']}>
+                        {error && <p style={{ color: "red" }}>{error}</p>}
                     </div>
+                    <button className={styles['submit']} type="submit">Log In</button>
                 </form>
-
             </div>
-
-            <div className="gate-container">
-                <img src={gate} alt="University Gate" className="gate" />
+            <div className={styles['bottom-section']}>
+                <img className={styles['bottom-background']} src={gate} alt="gate" />
             </div>
         </div>
     );

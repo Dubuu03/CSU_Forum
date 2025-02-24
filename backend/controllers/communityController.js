@@ -3,14 +3,16 @@ const Community = require("../models/Community");
 // Create a new community (requires admin approval)
 exports.createCommunity = async (req, res) => {
     try {
-        const { name, description, creatorId, creatorName, tags } = req.body;
+        const { name, description, image, creatorId, creatorName, tags } = req.body;
 
         const newCommunity = new Community({
             name,
             description,
+            image,
             creatorId,
             creatorName,
-            tags
+            tags,
+            memberIds: [creatorId] // Automatically add creator as a member
         });
 
         await newCommunity.save();
@@ -39,7 +41,6 @@ exports.getPendingCommunities = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 // Get a single community by ID
 exports.getCommunityById = async (req, res) => {
@@ -93,6 +94,107 @@ exports.getUserCommunities = async (req, res) => {
         res.json(communities);
     } catch (error) {
         res.status(500).json({ error: "Error fetching user communities" });
+    }
+};
+
+// Get all approved communities the user is NOT a member of
+exports.getUnjoinedCommunities = async (req, res) => {
+    const { studentId } = req.params;
+
+    try {
+        // Convert studentId to string to ensure type consistency
+        const stringStudentId = String(studentId);
+
+        const communities = await Community.find({
+            isApproved: true,
+            memberIds: {
+                $not: { $eq: stringStudentId } //way to check non-membership
+            }
+        }).exec(); // Adding .exec() for better error handling
+
+        // Double-check filter on the results to ensure accuracy
+        const filteredCommunities = communities.filter(
+            community => !community.memberIds.includes(stringStudentId)
+        );
+
+        res.json(filteredCommunities);
+    } catch (error) {
+        console.error("Server error:", error);
+        res.status(500).json({
+            error: "Error fetching unjoined communities",
+            details: error.message
+        });
+    }
+};
+
+
+// Join a community
+exports.joinCommunity = async (req, res) => {
+    const { communityId, studentId } = req.body;
+
+    try {
+        console.log("Join request received for:", { communityId, studentId });
+
+        const community = await Community.findById(communityId);
+        if (!community) {
+            return res.status(404).json({ error: "Community not found" });
+        }
+
+        // Ensure `memberIds` is initialized
+        if (!community.memberIds) {
+            community.memberIds = [];
+        }
+
+        // Check if the user is already a member
+        if (community.memberIds.includes(studentId)) {
+            return res.status(400).json({ error: "User is already a member of this community" });
+        }
+
+        // Add studentId to memberIds
+        community.memberIds.push(studentId);
+        await community.save();
+
+        console.log("User joined successfully:", { communityId, studentId });
+
+        res.json({ message: "Successfully joined the community", community });
+    } catch (error) {
+        console.error("Error joining community:", error);
+        res.status(500).json({ error: error.message || "Error joining community" });
+    }
+};
+
+// Leave or Unfollow a Community
+exports.leaveCommunity = async (req, res) => {
+    const { communityId, studentId } = req.body;
+
+    try {
+        console.log("Leave request received for:", { communityId, studentId });
+
+        const community = await Community.findById(communityId);
+        if (!community) {
+            return res.status(404).json({ error: "Community not found" });
+        }
+
+        // Check if the user is the owner
+        if (community.creatorId.toString() === studentId) {
+            return res.status(403).json({ error: "Community owners cannot leave their own community." });
+        }
+
+        // Check if the user is a member of the community
+        if (!community.memberIds.includes(studentId)) {
+            return res.status(400).json({ error: "User is not a member of this community" });
+        }
+
+        // Remove studentId from memberIds array
+        community.memberIds = community.memberIds.filter(id => id !== studentId);
+        await community.save();
+
+        console.log("User left the community successfully:", { communityId, studentId });
+
+        res.json({ message: "Successfully left the community", community });
+    } catch (error) {
+        console.error("Error leaving community:", error);
+        res.status(500).json({ error: error.message || "Error leaving community" });
     }
 };
 

@@ -1,7 +1,8 @@
 const discussionSchema = new mongoose.Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
-    authorId: { type: String, required: true }, 
+    image: { type: String },
+    authorId: { type: String, required: true },
     authorName: { type: String, required: true },
     community: { type: mongoose.Schema.Types.ObjectId, ref: "Community", required: true },
     tags: [{ type: String }],
