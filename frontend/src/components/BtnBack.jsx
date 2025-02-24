@@ -6,13 +6,10 @@ const BtnBack = () => {
 
     return (
         <ChevronLeft
-            size={24}
+            size={28}
             color="#333"
             style={{
-                cursor: "pointer",
-                position: "absolute",
-                left: "20px",
-                top: "50px",
+                cursor: "pointer"
             }}
             onClick={() => navigate(-1)}
         />
