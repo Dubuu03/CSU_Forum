@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/CommunityCard.module.css";
+import styles from "../../styles/Communities/CommunityCard.module.css";
 
 const CommunityCard = ({ image, name, members, description, isTopList }) => {
     return (

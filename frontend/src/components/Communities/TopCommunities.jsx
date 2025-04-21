@@ -1,7 +1,7 @@
 import React from "react";
 import CommunityCard from "./CommunityCard"; // Import the CommunityCard component
 import { motion } from "framer-motion";
-import styles from "../../styles/TopCommunities.module.css"; // Import styles
+import styles from "../../styles/Communities/TopCommunities.module.css"; // Import styles
 
 const TopCommunities = ({ topCommunities }) => {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import CommunityCard from "./CommunityCard";
 import { motion } from "framer-motion";
-import styles from "../../styles/CommunityCard.module.css";
+import styles from "../../styles/Communities/CommunityCard.module.css";
 
 const DiscoverCommunities = ({ communities }) => {
   return (

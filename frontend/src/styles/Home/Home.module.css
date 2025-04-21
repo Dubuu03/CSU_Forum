@@ -1,0 +1,19 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100vh;
+    position: relative;
+    overflow-y: hidden; /* Prevent vertical scrolling */
+    overflow-x: hidden;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+    flex-grow: 1;
+    gap: 1.4rem;
+    width: 100%;
+}

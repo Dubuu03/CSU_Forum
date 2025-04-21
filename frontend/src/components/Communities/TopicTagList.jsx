@@ -1,6 +1,6 @@
 import React from "react";
 import TopicTag from "./TopicTag"; // Import the TopicTag component
-import styles from "../../styles/TopicTag.module.css"; // Import styles
+import styles from "../../styles/Communities/TopicTag.module.css"; // Import styles
 import { motion } from "framer-motion";
 
 const TopicTagList = ({ topics }) => {
@@ -11,6 +11,9 @@ const TopicTagList = ({ topics }) => {
             </span> 
             <motion.div 
                 className={styles.topicList}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
                 drag="x"
                 dragConstraints={{ left: -120, right: 0 }} // Adjust constraints
             >

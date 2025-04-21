@@ -4,7 +4,7 @@ import TopicTagList from "../components/Communities/TopicTagList";
 import DiscoverCommunities from "../components/Communities/DiscoverCommunities";
 import TopCommunities from "../components/Communities/TopCommunities";
 import avatar from "../assets/default-profile.png";
-import styles from "../styles/Communities.module.css";
+import styles from "../styles/Communities/Communities.module.css";
 
 const topics = [
     "Internet Culture", "Games", "Technology", "Movies & TV",
@@ -31,7 +31,7 @@ const Communities = () => {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.contentContainer}>
-                <Header />
+                <Header title="Communities" />
                 <TopicTagList topics={topics} />
                 <DiscoverCommunities communities={communities} />
                 <TopCommunities topCommunities={topCommunities} />

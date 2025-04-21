@@ -1,0 +1,44 @@
+.announcements {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    gap: 0.8rem;
+}
+
+.announcements span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #98050A;
+}
+
+.announcementList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.announcementCard {
+    position: relative;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    font-size: 0.6rem;
+    gap: 0.3rem;
+}
