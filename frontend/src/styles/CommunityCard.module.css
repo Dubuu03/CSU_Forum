@@ -70,9 +70,12 @@
 .communityList {
     display: flex;
     flex-wrap: wrap;
+    overflow-x: auto;
     width: 200%;
     gap: 7px;
+    scroll-snap-type: x mandatory;
 }
+
 
 .discoverSection span {
     font-size: 1rem;

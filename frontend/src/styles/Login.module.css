@@ -73,7 +73,7 @@
 .input-group {
     position: relative;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
 }
 
 .form-input {
@@ -84,13 +84,13 @@
     border-radius: 50px;
     box-sizing: border-box;
     background: white; /* Make sure the input has a solid background */
+    font-size: 1rem;
 }
 
 .password-toggle-icon {
   position: absolute;
   right: 32px;
   top: 50%;
-  transform: translateY(-40%);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -98,26 +98,14 @@
 }
 
 .form-label {
-    position: absolute;
-    left: 1.7rem;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
+    left: 1rem;
     color: #9D0208;
     font-size: 1rem;
     pointer-events: none;
-    transition: all 0.3s ease-in-out;
-    background: white; /* Match input background */
-    padding: 0 5px; /* Ensure it doesn't overlap input text */
+    font-weight: bold;
 }
 
-/* Move label up when input is focused or filled */
-.form-input:focus + .form-label,
-.form-input:not(:placeholder-shown) + .form-label {
-    top: 10px; /* Move label up */
-    font-size: 0.6rem;
-    color: #9D0208;
-    
-}
 
 .error {
     height: 2rem;

@@ -1,16 +1,24 @@
 import React from "react";
 import CommunityCard from "./CommunityCard"; // Import the CommunityCard component
+import { motion } from "framer-motion";
 import styles from "../../styles/TopCommunities.module.css"; // Import styles
 
 const TopCommunities = ({ topCommunities }) => {
   return (
     <div className={styles.topCommunitiesSection}>
       <span>Top Communities</span>
-      <div className={styles.communityList}>
+      <motion.div 
+        className={styles.communityList}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        drag="x" 
+        dragConstraints={{ left: -200, right: 0 }} // Adjust constraints based on content width
+      >
         {topCommunities.map((community, index) => (
           <CommunityCard key={index} {...community} isTopList={true} />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

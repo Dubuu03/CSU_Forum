@@ -17,7 +17,6 @@
     flex-wrap: wrap;
     width: 150%;
     gap: 7px;
-    overflow-x: auto;
 }
 
 .topicTag {
