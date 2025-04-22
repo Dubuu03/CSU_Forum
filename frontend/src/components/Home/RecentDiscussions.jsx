@@ -1,12 +1,17 @@
 import React from "react";
 import DiscussionCard from "./DiscussionCard";
 import styles from "../../styles/Home/RecentDiscussions.module.css";
+import { motion } from "framer-motion";
 
 const RecentDiscussions = ({ discussions }) => {
   return (
     <div className={styles.recentDiscussions}>
       <span>Recent Discussions</span>
-      <div className={styles.discussionList}>
+      <motion.div 
+        className={styles.discussionList}
+        drag="x"
+        dragConstraints={{ left: -200, right: 0 }} // Adjust scrolling distance
+      >
         {discussions.map((discussion, index) => (
           <DiscussionCard
             key={index}
@@ -19,7 +24,7 @@ const RecentDiscussions = ({ discussions }) => {
             profileSrc={discussion.profileSrc}
           />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

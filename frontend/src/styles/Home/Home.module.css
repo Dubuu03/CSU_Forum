@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-height: 100vh;
-    position: relative;
-    overflow-y: hidden; /* Prevent vertical scrolling */
+    height: 100vh;
+    overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden;
+    scroll-behavior: smooth; /* Smooth scrolling effect */
 }
 
 .contentContainer {
