@@ -63,6 +63,7 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className={styles['form-container']}>
                     <div className={styles['input-group']}>
+                        <label className={styles['form-label']}>Username:</label>
                         <input
                             type="text"
                             className={styles['form-input']}
@@ -72,9 +73,9 @@ const Login = () => {
                             onChange={handleChange}
                             required
                         />
-                        <label className={styles['form-label']}>Username</label>
                     </div>
                     <div className={styles['input-group']}>
+                        <label className={styles['form-label']}>Password:</label>
                         <input
                             type={showPassword ? "text" : "password"}
                             className={styles['form-input']}
@@ -84,8 +85,6 @@ const Login = () => {
                             onChange={handleChange}
                             required
                         />
-
-                        <label className={styles['form-label']}>Password</label>
                         <div className={styles['password-toggle-icon']} onClick={togglePasswordVisibility}>
                             {showPassword ? <EyeOff size={20} color="#666" /> : <Eye size={20} color="#666" />}
                         </div>

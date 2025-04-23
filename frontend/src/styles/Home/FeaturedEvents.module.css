@@ -1,0 +1,62 @@
+.eventsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    gap: 0.8rem;
+}
+
+.eventsContainer span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #98050A;
+}
+
+.eventCardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 150%;
+    gap: 12px;
+}
+
+.eventCard {
+    position: relative;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    background-color: white;
+    width: 8rem;
+    min-height: 10.5rem;
+}
+
+.banner {
+    position: absolute;
+    font-size: 0.5rem;
+    left: 0;
+    border: none;
+    padding: 4px;
+    background-color: #FAA307;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.eventImage {
+    width: 100%;
+}
+
+.eventDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 6px;
+    font-size: 8px;
+}
+
+.eventDetails span {
+    font-size: 10px;
+    font-weight: bold;
+}

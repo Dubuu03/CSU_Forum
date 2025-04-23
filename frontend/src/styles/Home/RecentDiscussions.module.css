@@ -1,0 +1,112 @@
+.recentDiscussions {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.recentDiscussions span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #98050A;
+}
+
+.discussionList {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.discussionCard {
+    position: relative;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    background-color: white;
+    width: 9rem;
+    min-height: 12rem;
+}
+
+.discussionImage {
+    width: 100%;
+}
+
+.discussionContent {
+    display: flex;
+    flex-direction: column;
+    font-size: 8px;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.title {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.tags span {
+    font-size: 8px;
+    border-radius: 2px;
+    padding: 2px 3px;
+    background-color: #FAA307;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.details {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.authorDetails {
+    display: flex;
+    align-items: center;
+    font-size: 8px;
+    flex-wrap: nowrap;
+}
+
+.profile {
+    border: 1px solid #000;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.comment {
+    position: relative;
+    left: 10px;
+    padding: 0.4rem 0.8rem;
+    border-left: 1px solid #C9C9C9;
+    font-size: 0.6rem;
+}
+
+.author {
+    font-weight: bold;
+}
