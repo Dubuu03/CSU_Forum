@@ -24,3 +24,12 @@
 .logo {
     width: 32%;
 }
+
+.menuButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
