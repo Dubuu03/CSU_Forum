@@ -6,6 +6,7 @@ import Community from "./pages/Community";
 import Onboarding from "./pages/Onboarding";
 import Communities from "./pages/Communities";
 import Home from "./pages/Home";
+
 import "./App.css";
 
 const App = () => {

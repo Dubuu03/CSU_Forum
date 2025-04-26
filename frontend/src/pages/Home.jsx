@@ -6,6 +6,7 @@ import LatestAnnouncements from "../components/Home/LatestAnnouncements";
 import RecentDiscussions from "../components/Home/RecentDiscussions";
 import ClubActivities from "../components/Home/ClubActivities";
 import Sidebar from "../components/Sidebar/Sidebar";
+import ProfileSidebar from "../components/Profile/ProfileSidebar";
 import CampusMap from "../components/Home/CampusMap";
 import styles from "../styles/Home/Home.module.css";
 import projName from "../assets/proj-name.png";
@@ -117,15 +118,26 @@ const activityData = [
     },
 ];
 
+const profileData = {
+    username: "U/Aquila0301",
+    profileImage: profile,
+    status: "Online",
+}
 const campusMapData = "https://maps.app.goo.gl/matSesDRNYDgxg7H6";
 
 const Home = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
     return (
         <div className={styles.mainContainer}>
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <ProfileSidebar profile={profileData} isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
             <div className={styles.contentContainer}>
-                <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-                <Header logo={projName} onOpenSidebar={() => setSidebarOpen(true)}/>
+                <Header 
+                    logo={projName} 
+                    onOpenSidebar={() => setSidebarOpen(true)}
+                    onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+                />
                 <FeaturedEvents events={event} />
                 <LatestAnnouncements announcements={announcementData} />
                 <RecentDiscussions discussions={discussionData} />

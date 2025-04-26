@@ -4,7 +4,7 @@ import SidebarHeader from "./SidebarHeader";
 import CreateCommunityButton from "./CreateCommunityButton";
 import MainCommunities from "./MainCommunities";
 import OtherCommunities from "./OtherCommunities";
-import styles from "../../styles/Sidebar/Sidebar.module.css";
+import styles from "../../styles/Slider/Sidebar.module.css";
 
 const Sidebar = ({ isOpen, onClose }) => {
   return (

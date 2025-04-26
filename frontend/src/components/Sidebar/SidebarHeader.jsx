@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/Sidebar/Sidebar.module.css";
+import styles from "../../styles/Slider/Sidebar.module.css";
 import csunite from  '../../assets/logov3.png';
 import projName from '../../assets/proj-name.png';
 import { X } from "lucide-react";

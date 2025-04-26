@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/Sidebar/Sidebar.module.css";
+import styles from "../../styles/Slider/Sidebar.module.css";
 import { CirclePlus } from "lucide-react";
 
 const CreateCommunityButton = () => {
