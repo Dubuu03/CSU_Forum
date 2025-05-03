@@ -6,6 +6,7 @@ import Community from "./pages/Community";
 import Onboarding from "./pages/Onboarding";
 import Communities from "./pages/Communities";
 import Home from "./pages/Home";
+import CommunityPage from "./pages/CommunityPage";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/community-page" element={<CommunityPage />} />
       </Routes>
     </Router>
   );

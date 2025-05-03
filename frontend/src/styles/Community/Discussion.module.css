@@ -1,0 +1,115 @@
+.discussionContainer {
+    width: 100%;
+    height: auto;
+    padding: 0 2rem;
+}
+
+.post {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    border-bottom: 1px solid #c9c9c9;
+    padding: 0.8rem 0;
+}
+
+.userAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.user {
+    width: 100%;
+}
+
+.postInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.userInfo {
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+
+}
+
+.postTitle {
+    font-size: 0.8rem;
+    font-weight: bold;
+    position: relative;
+    top: -4px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.tags span {
+    font-size: 8px;
+    border-radius: 2px;
+    padding: 2px 3px;
+    background-color: #FAA307;
+    margin-bottom: 4px;
+}
+
+.content {
+    font-size: 0.6rem;
+    margin-bottom: 4px;
+}
+
+.postImage {
+    width: 85%;
+}
+
+.postImage img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.interactionButtons {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.voteButtons {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 0.3rem 0.5rem;
+    background-color: #E0E0E0;
+}
+
+.voteButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    gap: 0.2rem;
+    font-size: 0.6rem;
+    background-color: transparent;
+}
+
+.commentButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    gap: 0.2rem;
+    font-size: 0.6rem;
+    background-color: transparent;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 0.3rem 0.5rem;
+    background-color: #E0E0E0;
+}
