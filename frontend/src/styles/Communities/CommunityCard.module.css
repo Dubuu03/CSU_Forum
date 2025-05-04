@@ -54,6 +54,12 @@
     top: -5px;
 }
 
+.joinedBtn {
+  background-color: #9d0208 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
 .members {
     position: relative;
     top: -5px;

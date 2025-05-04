@@ -102,30 +102,38 @@ exports.getUnjoinedCommunities = async (req, res) => {
     const { studentId } = req.params;
 
     try {
-        // Convert studentId to string to ensure type consistency
         const stringStudentId = String(studentId);
 
         const communities = await Community.find({
             isApproved: true,
-            memberIds: {
-                $not: { $eq: stringStudentId } //way to check non-membership
-            }
-        }).exec(); // Adding .exec() for better error handling
+            memberIds: { $ne: stringStudentId }
+        }).exec();
 
-        // Double-check filter on the results to ensure accuracy
-        const filteredCommunities = communities.filter(
+        const filtered = communities.filter(
             community => !community.memberIds.includes(stringStudentId)
         );
 
-        res.json(filteredCommunities);
+        
+        const formatted = filtered.map(c => ({
+            _id: c._id, 
+            name: c.name,
+            description: c.description,
+            image: c.image,
+            tags: c.tags,
+            members: c.memberIds.length,
+            memberIds: c.memberIds,
+        }));
+
+        res.json(formatted);
     } catch (error) {
         console.error("Server error:", error);
         res.status(500).json({
             error: "Error fetching unjoined communities",
-            details: error.message
+            details: error.message,
         });
     }
 };
+
 
 
 // Join a community
