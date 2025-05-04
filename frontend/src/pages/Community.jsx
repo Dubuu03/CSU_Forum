@@ -99,7 +99,7 @@ const Communities = () => {
 
             <button onClick={() => {
                 authService.logout();
-                navigate("/login"); // Redirect to login on logout
+                navigate("/login"); 
             }}>
                 Logout
             </button>

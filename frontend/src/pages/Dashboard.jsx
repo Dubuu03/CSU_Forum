@@ -70,6 +70,7 @@ const Dashboard = () => {
 
             <p><Link to="/createcommunity">Go to Create Community</Link></p>
             <p><Link to="/community">Go to Community</Link></p>
+            <p><Link to="/post">Go to Create Post</Link></p>
         </div>
     );
 };
