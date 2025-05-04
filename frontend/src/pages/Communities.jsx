@@ -32,16 +32,12 @@ const Communities = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
 
-    const profileData = {
-        username: "U/Aquila0301",
-        profileImage: avatar,
-        status: "Online",
-    }
 
     return (
         <div className={styles.mainContainer}>
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-            <ProfileSidebar profile={profileData} isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
+            <ProfileSidebar isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
+
             <div className={styles.contentContainer}>
                 <Header
                     title="Communities"

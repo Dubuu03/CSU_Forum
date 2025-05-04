@@ -41,7 +41,6 @@ const DiscoverCommunities = () => {
     }
   };
 
-
   const sortedByMembers = [...communities].sort(
     (a, b) => (b.memberIds?.length || 0) - (a.memberIds?.length || 0)
   );
@@ -51,28 +50,32 @@ const DiscoverCommunities = () => {
   return (
     <div className={styles.discoverSection}>
       <span>Discover Communities</span>
-      <motion.div
-        className={styles.communityList}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        drag="x"
-        dragConstraints={{ left: -200, right: 0 }}
-      >
-        {filteredCommunities.map((community) => (
-          <CommunityCard
-            key={community._id}
-            communityId={community._id}
-            name={community.name}
-            image={community.image}
-            members={community.memberIds?.length || 0}
-            description={community.description}
-            isTopList={false}
-            onJoin={handleJoin}
-            joined={joinedCommunities.includes(community._id)}
-          />
-        ))}
-      </motion.div>
+      {filteredCommunities.length === 0 ? (
+        <p className={styles.noCommunitiesText}>No communities found</p>
+      ) : (
+        <motion.div
+          className={styles.communityList}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          drag="x"
+          dragConstraints={{ left: -200, right: 0 }}
+        >
+          {filteredCommunities.map((community) => (
+            <CommunityCard
+              key={community._id}
+              communityId={community._id}
+              name={community.name}
+              image={community.image}
+              members={community.memberIds?.length || 0}
+              description={community.description}
+              isTopList={false}
+              onJoin={handleJoin}
+              joined={joinedCommunities.includes(community._id)}
+            />
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 };

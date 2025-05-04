@@ -12,7 +12,14 @@ const COLLEGES = new Map([
     ["cpad", { label: "College of Public Administration", color: "#ba0d41" }],
     ["chk", { label: "College of Human Kinetics", color: "#1b0dba" }],
 ]);
-
+const getCollegeShortcut = (label) => {
+    for (const [key, value] of COLLEGES.entries()) {
+        if (value.label === label) {
+            return key.toUpperCase();
+        }
+    }
+    return "DEPT";
+};
 const useStudentCollege = (accessToken) => {
     const [college, setCollege] = useState({ label: "Unknown College", color: "#3c3c3c" });
     const [loading, setLoading] = useState(true);

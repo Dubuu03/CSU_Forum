@@ -8,6 +8,7 @@ import Communities from "./pages/Communities";
 import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
 import CreateDiscussion from "./pages/CreateDiscussion";
+
 import "./App.css";
 
 const App = () => {

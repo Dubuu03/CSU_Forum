@@ -5,6 +5,7 @@ import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import { fetchUserCommunities } from "../services/communityService";
 import { createDiscussion } from "../services/discussionService";
 import { tagOptions } from "../constants/tagOptions";
+import BtnBack from "../components/BtnBack";
 
 const CreateDiscussion = () => {
     const accessToken = useAuthRedirect();
@@ -106,19 +107,17 @@ const CreateDiscussion = () => {
                 authorName: `${profile.FirstName} ${profile.LastName}`
             };
 
-            // Convert image to URL if needed - for now we'll pass null
-            // If you have image upload working separately, you'd use the URL from there
             let imageUrl = null;
             if (image && typeof image === 'string') {
                 imageUrl = image;
             }
 
-            // Use JSON format (true as last parameter) since that worked in Postman
+
             const result = await createDiscussion(discussionData, imageUrl, accessToken, true);
 
             if (result._id) {
                 alert("Post submitted successfully!");
-                navigate("/dashboard");
+                navigate("/home");
             } else {
                 throw new Error("Failed to create post");
             }
@@ -134,168 +133,260 @@ const CreateDiscussion = () => {
     if (profileError) return <p className="error">{profileError.message || profileError}</p>;
 
     return (
-        <div style={styles.container}>
-            <h2>Create a Post</h2>
+        <div style={styles.wrapper}>
+            {/* Top Bar */}
+            <div style={styles.topBar}>
+                <BtnBack />
+                <button onClick={handleSubmit} disabled={submitting} style={styles.postButton}>
+                    {submitting ? "Posting..." : "Post"}
+                </button>
+            </div>
 
-            {loadingCommunities ? (
-                <p>Loading communities...</p>
-            ) : errorCommunities ? (
-                <p className="error">{errorCommunities}</p>
-            ) : (
-                <form onSubmit={handleSubmit} style={styles.form} encType="multipart/form-data">
-                    <select
-                        value={postData.communityId}
-                        name="communityId"
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    >
-                        <option value="">Select a community</option>
-                        {communities.map((c) => (
-                            <option key={c._id} value={c._id}>
-                                {c.name}
-                            </option>
-                        ))}
-                    </select>
+            {/* Form */}
+            <form onSubmit={handleSubmit} style={styles.form} encType="multipart/form-data">
+                <label style={styles.label}>Create a Discussion</label>
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    value={postData.title}
+                    onChange={handleChange}
+                    required
+                    maxLength={100}
+                    style={styles.titleInput}
+                />
+                <textarea
+                    name="content"
+                    placeholder="Note something down"
+                    value={postData.content}
+                    onChange={handleChange}
+                    required
+                    maxLength={500}
+                    style={styles.textarea}
+                />
+                <div style={styles.charCount}>{postData.content.length}/500</div>
 
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Post Title"
-                        value={postData.title}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
+                <label style={styles.label}>Choose where to post</label>
+                <select
+                    value={postData.communityId}
+                    name="communityId"
+                    onChange={handleChange}
+                    required
+                    style={styles.pillSelect}
+                >
+                    <option value="">Select a community</option>
+                    {communities.map((c) => (
+                        <option key={c._id} value={c._id}>
+                            {c.name}
+                        </option>
+                    ))}
+                </select>
 
-                    <textarea
-                        name="content"
-                        placeholder="Content"
-                        value={postData.content}
-                        onChange={handleChange}
-                        required
-                        style={styles.textarea}
-                    />
+                <label style={styles.label}>Add up to 3 topics that fit your discussion</label>
+                <div style={styles.tagPicker}>
+                    {tagOptions.map((tag) => {
+                        const isSelected = selectedTags.includes(tag);
+                        return (
+                            <button
+                                key={tag}
+                                type="button"
+                                onClick={() => {
+                                    if (isSelected) {
+                                        removeTag(tag);
+                                    } else if (selectedTags.length < 3) {
+                                        handleTagSelectChange({ target: { value: tag } });
+                                    }
+                                }}
+                                style={{
+                                    ...styles.tagPill,
+                                    backgroundColor: isSelected ? "#9d0208" : "#fff",
+                                    color: isSelected ? "#fff" : "#000",
+                                    border: isSelected ? "none" : "1px solid #ccc",
+                                }}
+                            >
+                                {tag}
+                            </button>
+                        );
+                    })}
+                </div>
 
-                    {preview && (
-                        <div style={styles.imagePreview}>
-                            <img src={preview} alt="Preview" style={{ maxWidth: "100%", maxHeight: "300px" }} />
-                        </div>
-                    )}
+                {preview && (
+                    <div style={styles.imagePreview}>
+                        <img src={preview} alt="Preview" style={styles.image} />
+                    </div>
+                )}
 
+                <label style={styles.label}>Optional: Add an image to your post</label>
+                <label style={styles.imageUpload}>
+                    + Add Image
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        style={styles.input}
+                        style={styles.hiddenFileInput}
                     />
+                </label>
+            </form>
 
-                    <select
-                        onChange={handleTagSelectChange}
-                        style={styles.input}
-                        value=""
-                        disabled={selectedTags.length === 3}
-                    >
-                        <option value="" disabled>
-                            Select up to 3 tags
-                        </option>
-                        {tagOptions.map((tag) => (
-                            <option key={tag} value={tag} disabled={selectedTags.includes(tag)}>
-                                {tag}
-                            </option>
-                        ))}
-                    </select>
 
-                    <div style={styles.tagList}>
-                        {selectedTags.map((tag) => (
-                            <span key={tag} style={styles.tag}>
-                                {tag}
-                                <button
-                                    type="button"
-                                    onClick={() => removeTag(tag)}
-                                    style={styles.removeTagButton}
-                                >
-                                    &times;
-                                </button>
-                            </span>
-                        ))}
-                    </div>
-
-                    <button type="submit" disabled={submitting} style={styles.button}>
-                        {submitting ? "Submitting..." : "Submit"}
-                    </button>
-
-                    {submitError && <p className="error">{submitError}</p>}
-                </form>
-            )}
         </div>
     );
 };
 
 const styles = {
-    container: {
+    wrapper: {
         maxWidth: "500px",
-        margin: "50px auto",
-        padding: "20px",
-        backgroundColor: "#f1f1f1",
-        textAlign: "center",
+        margin: "0 auto",
+        padding: "24px 16px 80px",
+        backgroundColor: "#f4f4f4",
+        minHeight: "100vh",
+        fontFamily: "system-ui, sans-serif",
+        position: "relative",
     },
-    input: {
-        width: "100%",
-        padding: "10px",
-        marginBottom: "10px",
-        borderRadius: "5px",
+    topBar: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "20px",
+    },
+    postButton: {
+        padding: "6px 16px",
+        borderRadius: "20px",
         border: "1px solid #ccc",
+        backgroundColor: "#fff",
+        fontWeight: "500",
+        cursor: "pointer",
+    },
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "14px",
+    },
+    titleInput: {
+        fontSize: "20px",
+        fontWeight: "600",
+        border: "none",
+        outline: "none",
+        backgroundColor: "transparent",
+        borderBottom: "2px solid #ccc",
+        padding: "6px 0",
     },
     textarea: {
-        width: "100%",
-        padding: "10px",
-        minHeight: "80px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-    },
-    button: {
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#9d0208",
-        color: "#fff",
-        fontSize: "16px",
-        fontWeight: "bold",
         border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        marginBottom: "10px",
+        outline: "none",
+        fontSize: "16px",
+        backgroundColor: "transparent",
+        resize: "vertical",
+        minHeight: "100px",
+    },
+    pillSelect: {
+        padding: "10px 16px",
+        borderRadius: "30px",
+        border: "1px solid #ccc",
+        backgroundColor: "#e0e0e0",
+        fontSize: "14px",
+        appearance: "none",
     },
     tagList: {
         display: "flex",
         flexWrap: "wrap",
         gap: "8px",
-        marginTop: "10px",
-        marginBottom: "20px",
     },
     tag: {
-        backgroundColor: "#e0e0e0",
-        color: "#333",
-        padding: "6px 10px",
-        borderRadius: "50px",
-        fontSize: "14px",
+        padding: "6px 14px",
+        borderRadius: "18px",
+        fontSize: "13px",
+        backgroundColor: "#9d0208",
+        color: "#fff",
         display: "flex",
         alignItems: "center",
     },
     removeTagButton: {
         marginLeft: "8px",
-        background: "transparent",
+        background: "none",
         border: "none",
-        color: "#888",
+        color: "#fff",
         fontWeight: "bold",
         cursor: "pointer",
+        fontSize: "14px",
+    },
+    fileInput: {
+        fontSize: "14px",
+        border: "none",
+        background: "transparent",
     },
     imagePreview: {
-        marginBottom: "10px",
+        marginTop: "10px",
         border: "1px solid #ccc",
+        borderRadius: "8px",
         padding: "10px",
-        textAlign: "center",
+        backgroundColor: "#fff",
     },
+    image: {
+        maxWidth: "100%",
+        maxHeight: "300px",
+        borderRadius: "4px",
+    },
+    footer: {
+        position: "fixed",
+        bottom: "16px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        gap: "28px",
+        fontSize: "22px",
+        opacity: 0.7,
+    },
+    label: {
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: "-4px",
+        marginTop: "12px",
+        color: "#9d0208",
+
+    },
+
+    charCount: {
+        fontSize: "12px",
+        color: "#666",
+        textAlign: "right",
+        marginTop: "-10px",
+        marginBottom: "10px",
+    },
+    tagPicker: {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "8px",
+    },
+
+    tagPill: {
+        padding: "6px 14px",
+        borderRadius: "18px",
+        fontSize: "13px",
+        cursor: "pointer",
+        backgroundColor: "#fff",
+    },
+
+    imageUpload: {
+        display: "inline-block",
+        padding: "10px 18px",
+        backgroundColor: "#fff",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        fontSize: "14px",
+        color: "#333",
+        cursor: "pointer",
+        textAlign: "center",
+        width: "fit-content",
+    },
+
+    hiddenFileInput: {
+        display: "none",
+    }
+
 };
+
+
 
 export default CreateDiscussion;
