@@ -69,7 +69,7 @@ const Login = () => {
                             className={styles['form-input']}
                             name="id"
                             value={formData.id}
-                            placeholder=" "
+                            placeholder="Enter your username"
                             onChange={handleChange}
                             required
                         />
@@ -81,7 +81,7 @@ const Login = () => {
                             className={styles['form-input']}
                             name="password"
                             value={formData.password}
-                            placeholder=" "
+                            placeholder="Enter your password"
                             onChange={handleChange}
                             required
                         />

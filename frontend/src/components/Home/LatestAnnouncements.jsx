@@ -13,6 +13,7 @@ const LatestAnnouncements = ({ announcements }) => {
             date={announcement.date}
             title={announcement.title}
             message={announcement.message}
+            type={announcement.type}
           />
         ))}
       </div>

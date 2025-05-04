@@ -10,7 +10,9 @@ import styles from "../styles/Communities/Communities.module.css";
 
 import { tagOptions } from "../constants/tagOptions";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
-import useStudentProfile from "../hooks/Profile/useStudentProfile";
+
+import Sidebar from "../components/Sidebar/Sidebar";
+import ProfileSidebar from "../components/Profile/ProfileSidebar";
 
 const extractTopics = (options) => {
     if (!Array.isArray(options)) return [];
@@ -28,8 +30,14 @@ const Communities = () => {
 
     return (
         <div className={styles.mainContainer}>
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <ProfileSidebar profile={profileData} isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
             <div className={styles.contentContainer}>
-                <Header title="Communities" />
+                <Header
+                    title="Communities"
+                    onOpenSidebar={() => setSidebarOpen(true)}
+                    onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+                />
                 <TopicTagList topics={topics} />
                 <DiscoverCommunities communities={communities} />
                 <TopCommunities communities={communities} />
@@ -38,5 +46,6 @@ const Communities = () => {
         </div>
     );
 };
+
 
 export default Communities;
