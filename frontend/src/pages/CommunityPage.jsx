@@ -29,7 +29,28 @@ const CommunityPage = () => {
       likes: 120,
       comments: 15,
     },
-    
+    {
+      title: "Best Painting Techniques",
+      author: "Sophia Lee",
+      date: "12 April 2025",
+      content: "What are some of the best techniques you use for acrylic painting?",
+      imageSrc: profile,
+      tags: ["Acrylic", "Painting"],
+      postSrc: post,
+      likes: 120,
+      comments: 15,
+    },
+    {
+      title: "Best Painting Techniques",
+      author: "Sophia Lee",
+      date: "12 April 2025",
+      content: "What are some of the best techniques you use for acrylic painting?",
+      imageSrc: profile,
+      tags: ["Acrylic", "Painting"],
+      postSrc: post,
+      likes: 120,
+      comments: 15,
+    },
   ];
 
   return (

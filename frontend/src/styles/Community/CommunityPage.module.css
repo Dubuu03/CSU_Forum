@@ -4,7 +4,7 @@
     align-items: center;
     height: 100vh;
     flex-grow: 1;
-    gap: 1.4rem;
+    gap: 1rem;
     width: 100%;
 }
 
@@ -21,7 +21,6 @@
 .communityInfo {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
 }
 
 .joinBtn {
@@ -77,7 +76,7 @@
     align-items: center;
     width: 100%;
     background-color: #E0E0E0;
-    height: 60px;
+    height: 50px;
 }
 
 .tabButton {
