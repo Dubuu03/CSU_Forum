@@ -7,7 +7,7 @@ const DiscoverCommunities = ({ communities }) => {
   return (
     <div className={styles.discoverSection}>
       <span>Discover Communities</span>
-      <motion.div 
+      <motion.div
         className={styles.communityList}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
