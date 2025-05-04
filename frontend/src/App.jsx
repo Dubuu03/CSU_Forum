@@ -7,6 +7,7 @@ import Onboarding from "./pages/Onboarding";
 import Communities from "./pages/Communities";
 import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
+import CreateDiscussion from "./pages/CreateDiscussion";
 
 import "./App.css";
 
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/home" element={<Home />} />
         <Route path="/community-page" element={<CommunityPage />} />
+        <Route path="/post" element={<CreateDiscussion />}></Route>
       </Routes>
     </Router>
   );
