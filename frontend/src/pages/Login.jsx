@@ -34,7 +34,7 @@ const Login = () => {
             if (data.access_token) {
                 localStorage.setItem("accessToken", data.access_token);
                 setSuccess("Login successful!");
-                navigate("/dashboard");
+                navigate("/home");
             }
         } catch (err) {
             if (err instanceof AuthenticationError) {

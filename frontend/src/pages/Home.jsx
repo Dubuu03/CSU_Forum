@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
 import FeaturedEvents from "../components/Home/FeaturedEvents";
@@ -118,11 +118,6 @@ const activityData = [
     },
 ];
 
-const profileData = {
-    username: "U/Aquila0301",
-    profileImage: profile,
-    status: "Online",
-}
 const campusMapData = "https://maps.app.goo.gl/matSesDRNYDgxg7H6";
 
 const Home = () => {
@@ -131,10 +126,10 @@ const Home = () => {
     return (
         <div className={styles.mainContainer}>
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-            <ProfileSidebar profile={profileData} isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
+            <ProfileSidebar isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
             <div className={styles.contentContainer}>
-                <Header 
-                    logo={projName} 
+                <Header
+                    logo={projName}
                     onOpenSidebar={() => setSidebarOpen(true)}
                     onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
                 />

@@ -3,40 +3,25 @@ import { useNavigate } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import { createCommunity } from "../services/communityService";
-import { tagOptions } from '../constants/tagOptions';
+import { tagOptions } from "../constants/tagOptions";
+import BtnBack from "../components/BtnBack";
 
 const CreateCommunity = () => {
     const accessToken = useAuthRedirect();
     const navigate = useNavigate();
     const { profile, loading, error } = useStudentProfile(accessToken);
 
-    const [communityData, setCommunityData] = useState({ name: '', description: '', tags: '' });
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
+    const maxTags = 3;
 
-    const handleChange = (e) => {
-        setCommunityData({ ...communityData, [e.target.name]: e.target.value });
-    };
-
-    const handleTagChange = (e) => {
-        const selected = e.target.value.trim();
-        if (!selectedTags.includes(selected) && selectedTags.length < 3) {
-            const updatedTags = [...selectedTags, selected];
-            setSelectedTags(updatedTags);
-            setCommunityData({ ...communityData, tags: updatedTags.join(',') });
+    const handleTagClick = (tag) => {
+        if (selectedTags.includes(tag)) {
+            setSelectedTags(selectedTags.filter(t => t !== tag));
+        } else if (selectedTags.length < maxTags) {
+            setSelectedTags([...selectedTags, tag]);
         }
-    };
-
-    const handleTagSelectChange = (e) => {
-        const selectedTag = e.target.value;
-        if (selectedTag && !selectedTags.includes(selectedTag)) {
-            handleTagChange({ target: { value: selectedTag } });
-        }
-    };
-
-    const removeTag = (tagToRemove) => {
-        const updatedTags = selectedTags.filter(tag => tag !== tagToRemove);
-        setSelectedTags(updatedTags);
-        setCommunityData({ ...communityData, tags: updatedTags.join(',') });
     };
 
     const handleSubmit = async (e) => {
@@ -47,6 +32,12 @@ const CreateCommunity = () => {
         }
 
         try {
+            const communityData = {
+                name,
+                description,
+                tags: selectedTags.join(','),
+            };
+
             const result = await createCommunity(accessToken, communityData, {
                 IDNumber: profile.IDNumber,
                 formattedName: `${profile.FirstName} ${profile.LastName}`,
@@ -56,7 +47,7 @@ const CreateCommunity = () => {
                 alert('Error: ' + result.error);
             } else {
                 alert('Community submitted for approval!');
-                navigate('/dashboard');
+                navigate('/home');
             }
         } catch (error) {
             alert('Failed to create community.');
@@ -64,126 +55,133 @@ const CreateCommunity = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h2>Create a Community</h2>
-            {loading ? <p>Loading...</p> : error ? <p style={{ color: 'red' }}>Error: {error}</p> : (
-                <form onSubmit={handleSubmit} style={styles.form}>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Community Name"
-                        value={communityData.name}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                    <textarea
-                        name="description"
-                        placeholder="Description"
-                        value={communityData.description}
-                        onChange={handleChange}
-                        required
-                        style={styles.textarea}
-                    />
-                    <select
-                        onChange={handleTagSelectChange}
-                        style={styles.input}
-                        value={selectedTags.length === 3 ? "" : ""}
-                        disabled={selectedTags.length === 3}
-                    >
-                        <option value="" disabled>
-                            Select up to 3 tags
-                        </option>
-                        {tagOptions.map((tag) => (
-                            <option
+        <div style={styles.wrapper}>
+            <div style={styles.topBar}>
+                <div style={styles.backWrapper}><BtnBack /></div>
+                <button onClick={handleSubmit} style={styles.postButton}>Post</button>
+            </div>
+
+            <form onSubmit={handleSubmit} style={styles.form}>
+                <h2 style={styles.heading}>Tell us about your community</h2>
+                <p style={styles.subText}>A name and description help people understand what your community’s all about</p>
+
+                <input
+                    type="text"
+                    placeholder="Community Name"
+                    value={name}
+                    maxLength={21}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    style={styles.input}
+                />
+                <div style={styles.charCount}>{name.length}/21</div>
+
+                <textarea
+                    placeholder="Description"
+                    value={description}
+                    maxLength={100}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                    style={styles.textarea}
+                />
+                <div style={styles.charCount}>{description.length}/100</div>
+
+                <h2 style={styles.heading}>Choose community topics</h2>
+                <p style={styles.subText}>Add up to 3 topics to help interested users find your community</p>
+                <div style={styles.tagList}>
+                    {tagOptions.map(tag => {
+                        const isSelected = selectedTags.includes(tag);
+                        return (
+                            <button
                                 key={tag}
-                                value={tag}
-                                disabled={selectedTags.includes(tag)}
+                                type="button"
+                                onClick={() => handleTagClick(tag)}
+                                style={{
+                                    ...styles.tag,
+                                    backgroundColor: isSelected ? "#9d0208" : "#fff",
+                                    color: isSelected ? "#fff" : "#000",
+                                    border: isSelected ? "none" : "1px solid #ccc"
+                                }}
                             >
                                 {tag}
-                            </option>
-                        ))}
-                    </select>
-                    <div style={styles.tagList}>
-                        {selectedTags.map((tag) => (
-                            <span key={tag} style={styles.tag}>
-                                {tag}
-                                <button
-                                    type="button"
-                                    onClick={() => removeTag(tag)}
-                                    style={styles.removeTagButton}
-                                >
-                                    &times;
-                                </button>
-                            </span>
-                        ))}
-                    </div>
-                    <button type="submit" style={styles.button}>Create</button>
-                </form>
-            )}
+                            </button>
+                        );
+                    })}
+                </div>
+
+            </form>
         </div>
     );
 };
 
 const styles = {
-    container: {
-        maxWidth: "500px",
-        margin: "50px auto",
+    wrapper: {
+        maxWidth: "700px",
+        margin: "0 auto",
         padding: "20px",
-        backgroundColor: "#f1f1f1",
-        textAlign: "center",
+        fontFamily: "system-ui, sans-serif",
+    },
+    topBar: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "20px",
+    },
+    backWrapper: {
+        display: "flex",
+        alignItems: "center",
+    },
+    postButton: {
+        padding: "6px 16px",
+        borderRadius: "20px",
+        border: "1px solid #999",
+        backgroundColor: "#fff",
+        cursor: "pointer",
+    },
+    heading: {
+        color: "#9d0208",
+        fontSize: "18px",
+        margin: "24px 0 6px",
+    },
+    subText: {
+        fontSize: "14px",
+        marginBottom: "12px",
     },
     input: {
         width: "100%",
         padding: "10px",
-        marginBottom: "10px",
-        borderRadius: "5px",
+        borderRadius: "10px",
         border: "1px solid #ccc",
-
+        marginBottom: "4px",
     },
     textarea: {
         width: "100%",
         padding: "10px",
-        minHeight: "80px",
-        borderRadius: "5px",
+        borderRadius: "10px",
         border: "1px solid #ccc",
+        minHeight: "100px",
+        marginBottom: "4px",
     },
-    button: {
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#9d0208",
-        color: "#fff",
-        fontSize: "16px",
-        fontWeight: "bold",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        marginBottom: "10px",
+    charCount: {
+        fontSize: "12px",
+        textAlign: "right",
+        marginBottom: "16px",
+        color: "#666",
     },
     tagList: {
         display: "flex",
         flexWrap: "wrap",
         gap: "8px",
         marginTop: "10px",
-        marginBottom: "20px",
     },
     tag: {
-        backgroundColor: "#e0e0e0",
-        color: "#333",
-        padding: "6px 10px",
-        borderRadius: "50px",
-        fontSize: "14px",
-        display: "flex",
-        alignItems: "center",
-    },
-    removeTagButton: {
-        marginLeft: "8px",
-        background: "transparent",
-        border: "none",
-        color: "#888",
-        fontWeight: "bold",
+        padding: "6px 14px",
+        borderRadius: "18px",
         cursor: "pointer",
-    },
+        fontSize: "13px",
+        lineHeight: "1.2",
+    }
+
 };
 
 export default CreateCommunity;
