@@ -51,9 +51,10 @@
 
 .tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 4px;
     margin-bottom: 8px;
+    overflow: hidden;
 }
 
 .tags span {

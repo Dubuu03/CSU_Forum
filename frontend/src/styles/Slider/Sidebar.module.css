@@ -1,0 +1,123 @@
+.sidebar {
+    background-color: #F1F1F1;
+    color: #434343;
+    padding: 2.5rem 2rem;
+    width: 290px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 101;
+    position: fixed;
+    top: 0;
+    left: 0;
+    gap: 0rem;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* ✅ Lowers opacity when sidebar is open */
+    z-index: 100;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.headerLogo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo {
+    width: 23px;
+    height: 23px;
+}
+
+.projName {
+    width: 50%;
+}
+
+.closeBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.createCommunity {
+    width: 100%;
+    padding: 1rem 0;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.createBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    border: none;
+}
+
+.mainCommunity {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.mainCommunity span {
+    font-size: 0.8rem;
+    color: #7d7d7d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mainCommunityList {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.3rem 0;
+}
+
+.otherCommunities {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.otherCommunities span {
+    font-size: 0.8rem;
+    color: #7d7d7d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.otherCommunitiesList {
+    list-style-type: none;
+}

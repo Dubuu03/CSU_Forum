@@ -1,0 +1,120 @@
+.sidebar {
+    background-color: #F1F1F1;
+    color: #434343;
+    padding: 2.5rem 2rem;
+    width: 290px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 101;
+    position: fixed;
+    top: 0;
+    right: 0;
+    gap: 0rem;
+    border: 1px solid #c9c9c9;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* ✅ Lowers opacity when sidebar is open */
+    z-index: 100;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.profileHeader {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #c9c9c9;
+    gap: 1rem;
+}
+
+.closeBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.profilePicContainer {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.profilePic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.username {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status {
+    font-size: 0.7rem;
+    border: 2px solid #c9c9c9;
+    padding: 0.3rem 1.5rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+}
+
+.online {
+    color: #00C224;
+    border-color: #00C224;
+}
+
+.offline {
+    color: #FF0000;
+    border-color: #FF0000;
+}
+
+.profileMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    padding: 1rem 0;
+}
+
+.menuList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menuList li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+

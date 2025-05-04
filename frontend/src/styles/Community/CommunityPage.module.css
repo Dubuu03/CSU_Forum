@@ -1,0 +1,94 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    flex-grow: 1;
+    gap: 1.4rem;
+    width: 100%;
+}
+
+.header {
+    width: 100%;
+    height: 40%;
+    padding: 3rem 2rem 0rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, #980309 0%, #F1F1F1 72%);
+}
+
+.communityInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.joinBtn {
+    width: 80px;
+    padding: 0.6rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #E9DDDD;
+    margin-bottom: 5px;
+}
+
+.communityName {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.organizers {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.tags span {
+    font-size: 8px;
+    border-radius: 2px;
+    padding: 2px 3px;
+    background-color: #FAA307;
+}
+
+.stats {
+    display: flex;
+    font-size: 0.7rem;
+    gap: 0.8rem;
+}
+
+.info span {
+    font-weight: bold;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    background-color: #E0E0E0;
+    height: 60px;
+}
+
+.tabButton {
+    font-size: 0.8rem;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.activeTab {
+    font-weight: bold;
+    border-bottom: 3px solid #9A0309;
+}

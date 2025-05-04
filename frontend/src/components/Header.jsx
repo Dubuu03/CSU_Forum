@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { AlignJustify, Search, CircleUserRound } from 'lucide-react';
-import styles from '../styles/Header.module.css';
+import React from "react";
+import { AlignJustify, Search, CircleUserRound } from "lucide-react";
+import styles from "../styles/Header.module.css";
 
-const Header = ({ title, logo }) => {
+const Header = ({ title, logo, onOpenSidebar, onOpenProfileSidebar }) => {
     return (
         <header className={styles.header}>
             <div className={styles.pageInfo}>
-                <AlignJustify />
+                <button className={styles.menuButton} onClick={onOpenSidebar}>
+                    <AlignJustify />
+                </button>
                 {logo ? (
                     <img src={logo} alt="Logo" className={styles.logo} />
                 ) : (
@@ -15,10 +17,12 @@ const Header = ({ title, logo }) => {
             </div>
             <div className={styles.rightIcons}>
                 <Search />
-                <CircleUserRound />
+                <button className={styles.profileButton} onClick={onOpenProfileSidebar}>
+                    <CircleUserRound />
+                </button>
             </div>
         </header>
     );
-}
+};
 
 export default Header;

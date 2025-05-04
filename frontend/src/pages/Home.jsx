@@ -1,11 +1,12 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import NavBar from "../components/NavBar";
 import FeaturedEvents from "../components/Home/FeaturedEvents";
 import LatestAnnouncements from "../components/Home/LatestAnnouncements";
 import RecentDiscussions from "../components/Home/RecentDiscussions";
 import ClubActivities from "../components/Home/ClubActivities";
+import Sidebar from "../components/Sidebar/Sidebar";
+import ProfileSidebar from "../components/Profile/ProfileSidebar";
 import CampusMap from "../components/Home/CampusMap";
 import styles from "../styles/Home/Home.module.css";
 import projName from "../assets/proj-name.png";
@@ -40,16 +41,19 @@ const announcementData = [
         date: "7 June 2025",
         title: "Academic Update",
         message: "Prelims is officially evicted sa bahay ni Urdujah",
+        type: "alert",
     },
     {
         date: "7 June 2025",
         title: "Schedule Update",
         message: "Final exams moved to next week.",
+        type: "info",
     },
     {
         date: "7 June 2025",
         title: "Faculty Notice",
         message: "Professor Reyes is on leave for the month.",
+        type: "event",
     },
 ];
 
@@ -114,13 +118,26 @@ const activityData = [
     },
 ];
 
+const profileData = {
+    username: "U/Aquila0301",
+    profileImage: profile,
+    status: "Online",
+}
 const campusMapData = "https://maps.app.goo.gl/matSesDRNYDgxg7H6";
 
 const Home = () => {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
     return (
         <div className={styles.mainContainer}>
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <ProfileSidebar profile={profileData} isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
             <div className={styles.contentContainer}>
-                <Header logo={projName} />
+                <Header 
+                    logo={projName} 
+                    onOpenSidebar={() => setSidebarOpen(true)}
+                    onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+                />
                 <FeaturedEvents events={event} />
                 <LatestAnnouncements announcements={announcementData} />
                 <RecentDiscussions discussions={discussionData} />
