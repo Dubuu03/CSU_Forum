@@ -13,6 +13,7 @@ import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 
 import Sidebar from "../components/Sidebar/Sidebar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
+import avatar from "../assets/default-profile.png";
 
 const extractTopics = (options) => {
     if (!Array.isArray(options)) return [];
@@ -27,6 +28,15 @@ const Communities = () => {
 
     const accessToken = useAuthRedirect();
     const navigate = useNavigate();
+
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
+
+    const profileData = {
+        username: "U/Aquila0301",
+        profileImage: avatar,
+        status: "Online",
+    }
 
     return (
         <div className={styles.mainContainer}>

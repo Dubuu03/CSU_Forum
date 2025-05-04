@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/home" element={<Home />} />
         <Route path="/community-page" element={<CommunityPage />} />
-        <Route path="/post" element={<CreateDiscussion />}></Route>
+        <Route path="/discussion" element={<CreateDiscussion />}></Route>
       </Routes>
     </Router>
   );
