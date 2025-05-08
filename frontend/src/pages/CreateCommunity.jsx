@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import useStudentPictures from "../hooks/Profile/useStudentPictures"; // Import to get student picture
 import { createCommunity } from "../services/communityService";
 import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
@@ -10,6 +11,7 @@ const CreateCommunity = () => {
     const accessToken = useAuthRedirect();
     const navigate = useNavigate();
     const { profile, loading, error } = useStudentProfile(accessToken);
+    const { pictures } = useStudentPictures(accessToken); // Fetch profile picture of creator
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -18,16 +20,20 @@ const CreateCommunity = () => {
 
     const handleTagClick = (tag) => {
         if (selectedTags.includes(tag)) {
-            setSelectedTags(selectedTags.filter(t => t !== tag));
+            setSelectedTags(selectedTags.filter((t) => t !== tag));
         } else if (selectedTags.length < maxTags) {
             setSelectedTags([...selectedTags, tag]);
         }
     };
 
+    // Automatically get the image of the logged-in user (creator's image)
+    const creatorImage = pictures?.profpic || ""; // Use profile picture URL (or fallback if not available)
+    const creatorName = `${profile?.FirstName} ${profile?.LastName}`; // Full name of the creator
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!profile) {
-            alert('Error: Unable to fetch creator information.');
+            alert("Error: Unable to fetch creator information.");
             return;
         }
 
@@ -35,35 +41,42 @@ const CreateCommunity = () => {
             const communityData = {
                 name,
                 description,
-                tags: selectedTags.join(','),
+                tags: selectedTags.join(","),
+                creatorImage, // Send the creator's image
             };
 
             const result = await createCommunity(accessToken, communityData, {
                 IDNumber: profile.IDNumber,
-                formattedName: `${profile.FirstName} ${profile.LastName}`,
+                formattedName: creatorName,
             });
 
             if (result.error) {
-                alert('Error: ' + result.error);
+                alert("Error: " + result.error);
             } else {
-                alert('Community submitted for approval!');
-                navigate('/home');
+                alert("Community submitted for approval!");
+                navigate("/home");
             }
         } catch (error) {
-            alert('Failed to create community.');
+            alert("Failed to create community.");
         }
     };
 
     return (
         <div style={styles.wrapper}>
             <div style={styles.topBar}>
-                <div style={styles.backWrapper}><BtnBack /></div>
-                <button onClick={handleSubmit} style={styles.postButton}>Post</button>
+                <div style={styles.backWrapper}>
+                    <BtnBack />
+                </div>
+                <button onClick={handleSubmit} style={styles.postButton}>
+                    Post
+                </button>
             </div>
 
             <form onSubmit={handleSubmit} style={styles.form}>
                 <h2 style={styles.heading}>Tell us about your community</h2>
-                <p style={styles.subText}>A name and description help people understand what your community’s all about</p>
+                <p style={styles.subText}>
+                    A name and description help people understand what your community’s all about
+                </p>
 
                 <input
                     type="text"
@@ -87,9 +100,11 @@ const CreateCommunity = () => {
                 <div style={styles.charCount}>{description.length}/100</div>
 
                 <h2 style={styles.heading}>Choose community topics</h2>
-                <p style={styles.subText}>Add up to 3 topics to help interested users find your community</p>
+                <p style={styles.subText}>
+                    Add up to 3 topics to help interested users find your community
+                </p>
                 <div style={styles.tagList}>
-                    {tagOptions.map(tag => {
+                    {tagOptions.map((tag) => {
                         const isSelected = selectedTags.includes(tag);
                         return (
                             <button
@@ -100,7 +115,7 @@ const CreateCommunity = () => {
                                     ...styles.tag,
                                     backgroundColor: isSelected ? "#9d0208" : "#fff",
                                     color: isSelected ? "#fff" : "#000",
-                                    border: isSelected ? "none" : "1px solid #ccc"
+                                    border: isSelected ? "none" : "1px solid #ccc",
                                 }}
                             >
                                 {tag}
@@ -108,7 +123,6 @@ const CreateCommunity = () => {
                         );
                     })}
                 </div>
-
             </form>
         </div>
     );
@@ -180,8 +194,7 @@ const styles = {
         cursor: "pointer",
         fontSize: "13px",
         lineHeight: "1.2",
-    }
-
+    },
 };
 
 export default CreateCommunity;
