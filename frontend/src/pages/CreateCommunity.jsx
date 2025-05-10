@@ -6,7 +6,7 @@ import useStudentPictures from "../hooks/Profile/useStudentPictures";
 import { createCommunity } from "../services/communityService";
 import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
-import { Alert, Snackbar } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 import styles from "../styles/Communities/CreateCommunities.module.css";
 
 const CreateCommunity = () => {
@@ -20,8 +20,8 @@ const CreateCommunity = () => {
     const [selectedTags, setSelectedTags] = useState([]);
     const [banner, setBanner] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
-    const [alert, setAlert] = useState(null);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
+
     const maxTags = 3;
 
     const handleTagClick = (tag) => {
@@ -32,14 +32,31 @@ const CreateCommunity = () => {
         }
     };
 
+    const showAlert = (message, severity = "info") => {
+        setAlert({ open: true, message, severity });
+    };
+
+    const handleCloseSnackbar = () => {
+        setAlert({ ...alert, open: false });
+    };
+
     const creatorName = `${profile?.FirstName} ${profile?.LastName}`;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!profile) {
-            setAlert("Error: Unable to fetch creator information.");
-            setOpenSnackbar(true);
+            showAlert("Error: Unable to fetch creator information.", "error");
+            return;
+        }
+
+        if (!name.trim()) {
+            showAlert("Community name is required.", "warning");
+            return;
+        }
+
+        if (!description.trim()) {
+            showAlert("Description is required.", "warning");
             return;
         }
 
@@ -64,8 +81,7 @@ const CreateCommunity = () => {
                 uploadedFileName = uploadData.filename;
             } catch (uploadError) {
                 console.error("Image upload error:", uploadError);
-                setAlert("Image upload failed.");
-                setOpenSnackbar(true);
+                showAlert("Image upload failed.", "error");
                 return;
             }
         }
@@ -86,30 +102,27 @@ const CreateCommunity = () => {
 
             if (result.error) {
                 console.error("Backend error:", result);
-                setAlert("Error: " + result.error);
-                setOpenSnackbar(true);
+                showAlert("Error: " + result.error, "error");
             } else {
-                setAlert("Community submitted for approval!");
-                setOpenSnackbar(true);
+                showAlert("Community submitted for approval!", "success");
                 setTimeout(() => navigate("/home"), 1500);
             }
         } catch (error) {
             console.error("Submission error:", error);
-            setAlert("Failed to create community.");
-            setOpenSnackbar(true);
+            showAlert("Failed to create community.", "error");
         }
     };
 
     return (
         <>
             <Snackbar
-                open={openSnackbar}
+                open={alert.open}
                 autoHideDuration={3000}
-                onClose={() => setOpenSnackbar(false)}
+                onClose={handleCloseSnackbar}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-                <Alert onClose={() => setOpenSnackbar(false)} severity="info" sx={{ width: "100%" }}>
-                    {alert}
+                <Alert onClose={handleCloseSnackbar} severity={alert.severity} sx={{ width: "100%" }}>
+                    {alert.message}
                 </Alert>
             </Snackbar>
 

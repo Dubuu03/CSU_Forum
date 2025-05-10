@@ -13,7 +13,7 @@ import BtnBack from "../components/BtnBack";
 import Spinner from "../components/Spinner";
 import styles from "../styles/Communities/CreateDiscussion.module.css";
 
-const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
+const Alert = (props) => <MuiAlert elevation={6} {...props} />;
 
 const CreateDiscussion = () => {
     const accessToken = useAuthRedirect();
@@ -112,6 +112,18 @@ const CreateDiscussion = () => {
 
         if (!postData.communityId) {
             showAlert("Please select a community.", "error");
+            setSubmitting(false);
+            return;
+        }
+
+        if (!postData.title.trim()) {
+            showAlert("Title is required.", "warning");
+            setSubmitting(false);
+            return;
+        }
+
+        if (!postData.content.trim()) {
+            showAlert("Content is required.", "warning");
             setSubmitting(false);
             return;
         }
@@ -254,10 +266,15 @@ const CreateDiscussion = () => {
                 autoHideDuration={3000}
                 onClose={handleAlertClose}
             >
-                <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+                <Alert
+                    onClose={handleAlertClose}
+                    severity={alert.severity}
+                    sx={{ width: "100%" }}
+                >
                     {alert.message}
                 </Alert>
             </Snackbar>
+
         </div>
     );
 };
