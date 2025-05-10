@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const communityController = require("../controllers/communityController");
+const multer = require("multer");
+const path = require("path");
+
 
 // Create a new community (Requires approval)
 router.post("/", communityController.createCommunity);
@@ -32,6 +35,25 @@ router.post("/join", communityController.joinCommunity);
 // Leave a community
 router.post("/leave", communityController.leaveCommunity);
 
+
+// Set storage location and filename
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // Upload to /uploads folder
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    },
+});
+
+const upload = multer({ storage });
+
+// Handle image upload
+router.post("/upload-image", upload.single("image"), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+    res.status(200).json({ filename: req.file.filename });
+});
 
 
 module.exports = router;

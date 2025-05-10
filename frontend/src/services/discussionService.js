@@ -4,7 +4,6 @@ const API_BASE_URL = 'http://localhost:5000/api';
 
 
 //Create a new discussion post
-
 export const createDiscussion = async (discussionData, image, accessToken, useJson = false) => {
     try {
         let data;
@@ -13,39 +12,37 @@ export const createDiscussion = async (discussionData, image, accessToken, useJs
         };
 
         if (useJson) {
-            // Use JSON payload (like in your successful Postman request)
+            // JSON payload
             data = {
                 title: discussionData.title,
                 content: discussionData.content,
                 authorId: discussionData.authorId,
                 authorName: discussionData.authorName,
+                authorImage: discussionData.authorImage, // <-- Added
                 community: discussionData.communityId,
                 tags: discussionData.tags
             };
 
-            // Add image URL if it's a string
             if (image && typeof image === 'string') {
                 data.image = image;
             }
 
             headers['Content-Type'] = 'application/json';
         } else {
-            // Use FormData for multipart/form-data (for file uploads)
+            // FormData payload
             data = new FormData();
 
-            // Add discussion data to form
             data.append('title', discussionData.title);
             data.append('content', discussionData.content);
             data.append('authorId', discussionData.authorId);
             data.append('authorName', discussionData.authorName);
+            data.append('authorImage', discussionData.authorImage); // <-- Added
             data.append('community', discussionData.communityId);
 
-            // Add tags if they exist
             if (discussionData.tags && discussionData.tags.length > 0) {
                 data.append('tags', discussionData.tags);
             }
 
-            // Add image if it's a File object
             if (image && image instanceof File) {
                 data.append('image', image);
             }
@@ -67,6 +64,7 @@ export const createDiscussion = async (discussionData, image, accessToken, useJs
         throw error;
     }
 };
+
 
 // Fetch all discussions
 

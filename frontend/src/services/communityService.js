@@ -8,7 +8,9 @@ export const createCommunity = async (accessToken, communityData, creator) => {
         ...communityData,
         creatorId: creator.IDNumber,
         creatorName: creator.formattedName,
-        tags: communityData.tags.split(",").map((tag) => tag.trim()),
+        tags: Array.isArray(communityData.tags)
+            ? communityData.tags
+            : communityData.tags.split(",").map(tag => tag.trim()),
     };
 
     try {
@@ -21,12 +23,19 @@ export const createCommunity = async (accessToken, communityData, creator) => {
             body: JSON.stringify(requestBody),
         });
 
-        return await res.json();
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to create community");
+        }
+
+        return data;
     } catch (error) {
         console.error("Error creating community:", error);
         throw error;
     }
 };
+
 
 // Get all approved communities
 export const fetchAllCommunities = async () => {
@@ -176,3 +185,25 @@ export const leaveCommunity = async (accessToken, studentId, communityId) => {
     }
 };
 
+export const uploadCommunityImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+        const res = await fetch(`${API_URL}/upload-image`, {
+            method: "POST",
+            body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Image upload failed");
+        }
+
+        return data.filename; // You will save this filename in the community's "image" field
+    } catch (error) {
+        console.error("Image upload error:", error);
+        throw error;
+    }
+};

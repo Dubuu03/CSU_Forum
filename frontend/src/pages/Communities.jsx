@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import NavBar from "../components/NavBar";
@@ -13,7 +13,6 @@ import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 
 import Sidebar from "../components/Sidebar/Sidebar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
-import avatar from "../assets/default-profile.png";
 
 const extractTopics = (options) => {
     if (!Array.isArray(options)) return [];
@@ -23,7 +22,8 @@ const extractTopics = (options) => {
 };
 
 const Communities = () => {
-    const [communities, setCommunities] = useState([]);
+    const [selectedTag, setSelectedTag] = useState(null);
+    const [topCommunityIds, setTopCommunityIds] = useState([]);
     const topics = extractTopics(tagOptions);
 
     const accessToken = useAuthRedirect();
@@ -31,7 +31,6 @@ const Communities = () => {
 
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
-
 
     return (
         <div className={styles.mainContainer}>
@@ -44,14 +43,21 @@ const Communities = () => {
                     onOpenSidebar={() => setSidebarOpen(true)}
                     onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
                 />
-                <TopicTagList topics={topics} />
-                <DiscoverCommunities communities={communities} />
-                <TopCommunities communities={communities} />
+
+                <TopicTagList
+                    topics={topics}
+                    selectedTag={selectedTag}
+                    onSelectTag={setSelectedTag}
+                />
+
+                <DiscoverCommunities selectedTag={selectedTag} topCommunityIds={topCommunityIds} />
+
+                {!selectedTag && <TopCommunities setTopCommunityIds={setTopCommunityIds} />}
             </div>
+
             <NavBar />
         </div>
     );
 };
-
 
 export default Communities;

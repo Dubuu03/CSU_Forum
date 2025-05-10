@@ -55,8 +55,8 @@ const CommunityPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <CommunityHeader 
-        name={communityData.name} 
+      <CommunityHeader
+        name={communityData.name}
         organizer={communityData.organizer}
         date={communityData.date}
         members={communityData.members}

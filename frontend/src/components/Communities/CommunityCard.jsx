@@ -22,11 +22,17 @@ const CommunityCard = ({
     return (
         <div className={`${styles.communityCard} ${isTopList ? styles.topList : ""}`}>
             <div className={styles.communityInfo}>
-                <img
-                    src={image || "/src/assets/default-profile.png"}
-                    alt={name}
-                    className={styles.avatar}
-                />
+                {image ? (
+                    <img
+                        src={image}
+                        alt={name}
+                        className={styles.avatar}
+                    />
+                ) : (
+                    <div className={`${styles.avatar} ${styles.fallbackAvatar}`}>
+                        {name?.charAt(0).toUpperCase()}
+                    </div>
+                )}
                 <div className={styles.communityDetails}>
                     <span>{name}</span>
                     <p className={styles.members}>{members} members</p>
@@ -38,8 +44,6 @@ const CommunityCard = ({
                 >
                     {joined ? "Joined" : "Join"}
                 </button>
-
-
             </div>
             {description && <p className={styles.desc}>{description}</p>}
         </div>
