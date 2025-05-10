@@ -1,0 +1,120 @@
+.wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  position: relative;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.postButton {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.titleInput {
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  border-bottom: 2px solid #ccc;
+  padding: 6px 0;
+}
+
+.textarea {
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background-color: transparent;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.pillSelect {
+  padding: 10px 16px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  font-size: 14px;
+  appearance: none;
+}
+
+.tagPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagPill {
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.imagePreview {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 4px;
+}
+
+.imageUpload {
+  display: inline-block;
+  padding: 10px 18px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+  width: fit-content;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #9d0208;
+  margin-bottom: -4px;
+  margin-top: 12px;
+}
+
+.charCount {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
