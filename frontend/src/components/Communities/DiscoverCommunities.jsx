@@ -6,11 +6,13 @@ import { joinCommunity, fetchUnjoinedCommunities } from "../../services/communit
 import useStudentProfile from "../../hooks/Profile/useStudentProfile";
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 
-const DiscoverCommunities = () => {
+const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
   const accessToken = useAuthRedirect();
   const { profile } = useStudentProfile(accessToken);
   const [communities, setCommunities] = useState([]);
   const [joinedCommunities, setJoinedCommunities] = useState([]);
+
+  const IMAGE_BASE_URL = "http://localhost:5000/uploads/";
 
   useEffect(() => {
     const loadCommunities = async () => {
@@ -41,11 +43,20 @@ const DiscoverCommunities = () => {
     }
   };
 
-  const sortedByMembers = [...communities].sort(
+  const filteredByTag = selectedTag
+    ? communities.filter((c) =>
+      Array.isArray(c.tags) &&
+      c.tags.map(t => t.toLowerCase()).includes(selectedTag.toLowerCase())
+    )
+    : communities;
+
+  const sortedByMembers = [...filteredByTag].sort(
     (a, b) => (b.memberIds?.length || 0) - (a.memberIds?.length || 0)
   );
-  const top8Ids = new Set(sortedByMembers.slice(0, 4).map((c) => c._id));
-  const filteredCommunities = communities.filter(c => !top8Ids.has(c._id));
+
+  const filteredCommunities = selectedTag
+    ? sortedByMembers
+    : sortedByMembers.filter(c => !topCommunityIds.includes(c._id));
 
   return (
     <div className={styles.discoverSection}>
@@ -66,7 +77,11 @@ const DiscoverCommunities = () => {
               key={community._id}
               communityId={community._id}
               name={community.name}
-              image={community.image}
+              image={
+                community.image
+                  ? `${IMAGE_BASE_URL}${community.image}`
+                  : "/src/assets/default-profile.png"
+              }
               members={community.memberIds?.length || 0}
               description={community.description}
               isTopList={false}

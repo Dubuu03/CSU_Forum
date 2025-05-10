@@ -1,19 +1,30 @@
 const Discussion = require('../models/Discussion');
 const Comment = require('../models/Comment');
 
-// Create a new discussion
 const createDiscussion = async (req, res) => {
     try {
-        const { title, content, image, authorId, authorName, community, tags } = req.body;
+        const {
+            title,
+            content,
+            image,
+            authorId,
+            authorName,
+            authorImage,
+            community,     
+            tags
+        } = req.body;
+
         const newDiscussion = new Discussion({
             title,
             content,
             image,
             authorId,
             authorName,
+            authorImage,
             community,
             tags
         });
+
         await newDiscussion.save();
         res.status(201).json(newDiscussion);
     } catch (err) {
@@ -21,6 +32,8 @@ const createDiscussion = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+
 
 // Get all discussions
 const getAllDiscussions = async (req, res) => {

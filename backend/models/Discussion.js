@@ -7,6 +7,7 @@ const discussionSchema = new mongoose.Schema({
     image: { type: String },
     authorId: { type: String, required: true },
     authorName: { type: String, required: true },
+    authorImage: { type: String }, 
     community: { type: mongoose.Schema.Types.ObjectId, ref: "Community", required: true },
     tags: [{ type: String }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],

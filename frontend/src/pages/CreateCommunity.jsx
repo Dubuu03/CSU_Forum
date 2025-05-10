@@ -1,21 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
-import useStudentPictures from "../hooks/Profile/useStudentPictures"; // Import to get student picture
-import { createCommunity } from "../services/communityService";
+import useStudentPictures from "../hooks/Profile/useStudentPictures";
+import { createCommunity, uploadCommunityImage } from "../services/communityService";
 import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
+import styles from "../styles/Communities/CreateCommunities.module.css";
 
 const CreateCommunity = () => {
     const accessToken = useAuthRedirect();
     const navigate = useNavigate();
-    const { profile, loading, error } = useStudentProfile(accessToken);
-    const { pictures } = useStudentPictures(accessToken); // Fetch profile picture of creator
+    const { profile } = useStudentProfile(accessToken);
+    const { pictures } = useStudentPictures(accessToken);
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
+    const [banner, setBanner] = useState(null);
+    const [bannerPreview, setBannerPreview] = useState(null);
     const maxTags = 3;
 
     const handleTagClick = (tag) => {
@@ -26,55 +29,69 @@ const CreateCommunity = () => {
         }
     };
 
-    // Automatically get the image of the logged-in user (creator's image)
-    const creatorImage = pictures?.profpic || ""; // Use profile picture URL (or fallback if not available)
-    const creatorName = `${profile?.FirstName} ${profile?.LastName}`; // Full name of the creator
+    const creatorName = `${profile?.FirstName} ${profile?.LastName}`;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!profile) {
             alert("Error: Unable to fetch creator information.");
             return;
         }
 
-        try {
-            const communityData = {
-                name,
-                description,
-                tags: selectedTags.join(","),
-                creatorImage, // Send the creator's image
-            };
+        let uploadedFileName = "";
 
+        if (banner) {
+            try {
+                uploadedFileName = await uploadCommunityImage(banner);
+            } catch (uploadError) {
+                console.error("Image upload error:", uploadError);
+                alert("Image upload failed.");
+                return;
+            }
+        }
+
+        const communityData = {
+            name,
+            description,
+            tags: selectedTags,
+            image: uploadedFileName,
+            creatorImage: pictures?.profpic || "",
+        };
+
+        try {
             const result = await createCommunity(accessToken, communityData, {
                 IDNumber: profile.IDNumber,
                 formattedName: creatorName,
             });
 
             if (result.error) {
+                console.error("Backend error:", result);
                 alert("Error: " + result.error);
             } else {
                 alert("Community submitted for approval!");
                 navigate("/home");
             }
         } catch (error) {
+            console.error("Submission error:", error);
             alert("Failed to create community.");
         }
     };
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.topBar}>
-                <div style={styles.backWrapper}>
+        <div className={styles.wrapper}>
+            <div className={styles.topBar}>
+                <div className={styles.backWrapper}>
                     <BtnBack />
                 </div>
-                <button onClick={handleSubmit} style={styles.postButton}>
+                <button onClick={handleSubmit} className={styles.postButton}>
                     Post
                 </button>
             </div>
 
-            <form onSubmit={handleSubmit} style={styles.form}>
-                <h2 style={styles.heading}>Tell us about your community</h2>
-                <p style={styles.subText}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <h2 className={styles.heading}>Tell us about your community</h2>
+                <p className={styles.subText}>
                     A name and description help people understand what your community’s all about
                 </p>
 
@@ -85,9 +102,9 @@ const CreateCommunity = () => {
                     maxLength={21}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    style={styles.input}
+                    className={styles.input}
                 />
-                <div style={styles.charCount}>{name.length}/21</div>
+                <div className={styles.charCount}>{name.length}/21</div>
 
                 <textarea
                     placeholder="Description"
@@ -95,15 +112,58 @@ const CreateCommunity = () => {
                     maxLength={100}
                     onChange={(e) => setDescription(e.target.value)}
                     required
-                    style={styles.textarea}
+                    className={styles.textarea}
                 />
-                <div style={styles.charCount}>{description.length}/100</div>
+                <div className={styles.charCount}>{description.length}/100</div>
 
-                <h2 style={styles.heading}>Choose community topics</h2>
-                <p style={styles.subText}>
+                <h2 className={styles.heading}>Style your community</h2>
+                <p className={styles.subText}>
+                    A banner and avatar attract members and establish your community’s culture.
+                </p>
+
+                <div className={styles.bannerUploadRow}>
+                    <span>Banner</span>
+                    <label className={styles.bannerButton}>
+                        Add
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                setBanner(file);
+                                if (file) {
+                                    setBannerPreview(URL.createObjectURL(file));
+                                }
+                            }}
+                            style={{ display: "none" }}
+                        />
+                    </label>
+                </div>
+
+                <div className={styles.previewCard}>
+                    <div className={styles.previewHeader}>
+                        <img
+                            src={bannerPreview || "/src/assets/default-profile.png"}
+                            alt="Preview"
+                            className={styles.previewAvatar}
+                        />
+                        <div>
+                            <strong style={{ fontSize: "1rem", fontWeight: "bold", color: "#98050a" }}>
+                                {name || "Community Name"}
+                            </strong>
+                            <div style={{ fontSize: "12px", color: "#666" }}>0 members</div>
+                        </div>
+                    </div>
+                    <p style={{ fontSize: "13px", marginTop: "6px", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                        {description || "Find the motivation you need"}
+                    </p>
+                </div>
+
+                <h2 className={styles.heading}>Choose community topics</h2>
+                <p className={styles.subText}>
                     Add up to 3 topics to help interested users find your community
                 </p>
-                <div style={styles.tagList}>
+                <div className={styles.tagList}>
                     {tagOptions.map((tag) => {
                         const isSelected = selectedTags.includes(tag);
                         return (
@@ -111,8 +171,8 @@ const CreateCommunity = () => {
                                 key={tag}
                                 type="button"
                                 onClick={() => handleTagClick(tag)}
+                                className={styles.tag}
                                 style={{
-                                    ...styles.tag,
                                     backgroundColor: isSelected ? "#9d0208" : "#fff",
                                     color: isSelected ? "#fff" : "#000",
                                     border: isSelected ? "none" : "1px solid #ccc",
@@ -126,75 +186,6 @@ const CreateCommunity = () => {
             </form>
         </div>
     );
-};
-
-const styles = {
-    wrapper: {
-        maxWidth: "700px",
-        margin: "0 auto",
-        padding: "20px",
-        fontFamily: "system-ui, sans-serif",
-    },
-    topBar: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-    },
-    backWrapper: {
-        display: "flex",
-        alignItems: "center",
-    },
-    postButton: {
-        padding: "6px 16px",
-        borderRadius: "20px",
-        border: "1px solid #999",
-        backgroundColor: "#fff",
-        cursor: "pointer",
-    },
-    heading: {
-        color: "#9d0208",
-        fontSize: "18px",
-        margin: "24px 0 6px",
-    },
-    subText: {
-        fontSize: "14px",
-        marginBottom: "12px",
-    },
-    input: {
-        width: "100%",
-        padding: "10px",
-        borderRadius: "10px",
-        border: "1px solid #ccc",
-        marginBottom: "4px",
-    },
-    textarea: {
-        width: "100%",
-        padding: "10px",
-        borderRadius: "10px",
-        border: "1px solid #ccc",
-        minHeight: "100px",
-        marginBottom: "4px",
-    },
-    charCount: {
-        fontSize: "12px",
-        textAlign: "right",
-        marginBottom: "16px",
-        color: "#666",
-    },
-    tagList: {
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "8px",
-        marginTop: "10px",
-    },
-    tag: {
-        padding: "6px 14px",
-        borderRadius: "18px",
-        cursor: "pointer",
-        fontSize: "13px",
-        lineHeight: "1.2",
-    },
 };
 
 export default CreateCommunity;

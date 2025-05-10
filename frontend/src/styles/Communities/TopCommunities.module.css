@@ -1,20 +1,26 @@
 .topCommunitiesSection {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    gap: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: 0.8rem;
 }
 
 .topCommunitiesSection span {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #98050A;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #98050a;
 }
 
 .communityList {
-    display: flex;
-    flex-wrap: wrap;
-    width: 200%;
-    gap: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 200%;
+  gap: 7px;
+}
+.noCommunitiesText {
+  color: #888;
+  font-size: 16px;
+  margin-top: 1rem;
+  text-align: center;
 }
