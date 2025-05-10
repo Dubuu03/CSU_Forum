@@ -20,6 +20,10 @@ router.get("/:id", communityController.getCommunityById);
 // Approve a community (Admin Only)
 router.put("/:id/approve", communityController.approveCommunity);
 
+// Disapprove a community (Admin Only)
+router.put("/:id/disapprove", communityController.disapproveCommunity);
+
+
 // Delete a community
 router.delete("/:id", communityController.deleteCommunity);
 
@@ -39,7 +43,7 @@ router.post("/leave", communityController.leaveCommunity);
 // Set storage location and filename
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/"); // Upload to /uploads folder
+        cb(null, "uploads/community"); // Upload to /uploads folder
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname)); // Unique filename

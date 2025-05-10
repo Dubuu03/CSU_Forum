@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import CommunityCard from "./CommunityCard";
 import { motion } from "framer-motion";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import styles from "../../styles/Communities/TopCommunities.module.css";
 import { joinCommunity, fetchUnjoinedCommunities } from "../../services/communityService";
 import useStudentProfile from "../../hooks/Profile/useStudentProfile";
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 import avatar from "../../assets/default-profile.png";
 
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
+
 const TopCommunities = ({ setTopCommunityIds }) => {
   const accessToken = useAuthRedirect();
   const { profile } = useStudentProfile(accessToken);
   const [topCommunities, setTopCommunities] = useState([]);
   const [joinedCommunities, setJoinedCommunities] = useState([]);
+  const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
 
-  const IMAGE_BASE_URL = "http://localhost:5000/uploads/";
+  const IMAGE_BASE_URL = "http://localhost:5000/uploads/community/";
+
+  const showAlert = (message, severity = "info") => {
+    setAlert({ open: true, message, severity });
+  };
+
+  const handleAlertClose = () => {
+    setAlert({ ...alert, open: false });
+  };
 
   useEffect(() => {
     const loadTopCommunities = async () => {
@@ -49,6 +63,7 @@ const TopCommunities = ({ setTopCommunityIds }) => {
         setTopCommunities(sorted.slice(0, 4));
       } catch (err) {
         console.error("Failed to load top communities:", err);
+        showAlert("Failed to load top communities.", "error");
       }
     };
 
@@ -57,18 +72,19 @@ const TopCommunities = ({ setTopCommunityIds }) => {
 
   const handleJoin = async (communityId) => {
     if (!profile) {
-      alert("You must be logged in to join a community.");
+      showAlert("You must be logged in to join a community.", "warning");
       return;
     }
 
     try {
       await joinCommunity(accessToken, profile.IDNumber, communityId);
-      alert("Successfully joined the community!");
       setJoinedCommunities((prev) => [...prev, communityId]);
+      showAlert("Successfully joined the community!", "success");
     } catch (err) {
-      alert("Failed to join the community.");
+      showAlert("Failed to join the community.", "error");
     }
   };
+
   return (
     <div className={styles.topCommunitiesSection}>
       <span>Top Communities</span>
@@ -98,6 +114,19 @@ const TopCommunities = ({ setTopCommunityIds }) => {
           ))}
         </motion.div>
       )}
+
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleAlertClose}
+        sx={{ m: '64px' }}
+      >
+        <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 };

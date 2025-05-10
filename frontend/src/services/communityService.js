@@ -185,6 +185,7 @@ export const leaveCommunity = async (accessToken, studentId, communityId) => {
     }
 };
 
+// Upload an image for a community
 export const uploadCommunityImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -201,7 +202,7 @@ export const uploadCommunityImage = async (file) => {
             throw new Error(data.error || "Image upload failed");
         }
 
-        return data.filename; // You will save this filename in the community's "image" field
+        return data.filename;
     } catch (error) {
         console.error("Image upload error:", error);
         throw error;

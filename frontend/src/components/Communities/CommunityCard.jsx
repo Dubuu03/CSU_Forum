@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import styles from "../../styles/Communities/CommunityCard.module.css";
+
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const CommunityCard = ({
     image,
@@ -11,11 +15,22 @@ const CommunityCard = ({
     onJoin,
     joined,
 }) => {
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
+
+    const showAlert = (message, severity = "info") => {
+        setAlert({ open: true, message, severity });
+    };
+
+    const handleAlertClose = () => {
+        setAlert({ ...alert, open: false });
+    };
+
     const handleJoinClick = () => {
         if (communityId) {
             onJoin(communityId);
         } else {
             console.warn("Missing communityId");
+            showAlert("Community ID is missing. Please try again later.", "warning");
         }
     };
 
@@ -46,6 +61,17 @@ const CommunityCard = ({
                 </button>
             </div>
             {description && <p className={styles.desc}>{description}</p>}
+
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={alert.open}
+                autoHideDuration={3000}
+                onClose={handleAlertClose}
+            >
+                <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+                    {alert.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };
