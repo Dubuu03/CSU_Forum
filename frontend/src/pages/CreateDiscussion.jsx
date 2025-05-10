@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentPictures from "../hooks/Profile/useStudentPictures";
@@ -7,7 +10,10 @@ import { fetchUserCommunities } from "../services/communityService";
 import { createDiscussion } from "../services/discussionService";
 import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
+import Spinner from "../components/Spinner";
 import styles from "../styles/Communities/CreateDiscussion.module.css";
+
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const CreateDiscussion = () => {
     const accessToken = useAuthRedirect();
@@ -27,9 +33,17 @@ const CreateDiscussion = () => {
     const [preview, setPreview] = useState(null);
     const [communities, setCommunities] = useState([]);
     const [loadingCommunities, setLoadingCommunities] = useState(true);
-    const [errorCommunities, setErrorCommunities] = useState("");
     const [submitting, setSubmitting] = useState(false);
-    const [submitError, setSubmitError] = useState("");
+
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
+
+    const showAlert = (message, severity = "info") => {
+        setAlert({ open: true, message, severity });
+    };
+
+    const handleAlertClose = () => {
+        setAlert({ ...alert, open: false });
+    };
 
     useEffect(() => {
         const loadUserCommunities = async () => {
@@ -38,7 +52,7 @@ const CreateDiscussion = () => {
                 const data = await fetchUserCommunities(profile.IDNumber);
                 setCommunities(data);
             } catch (err) {
-                setErrorCommunities("Failed to load communities.");
+                showAlert("Failed to load communities.", "error");
             } finally {
                 setLoadingCommunities(false);
             }
@@ -83,22 +97,21 @@ const CreateDiscussion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        setSubmitError("");
 
         if (!profile) {
-            alert("Error: Unable to fetch creator profile.");
+            showAlert("Unable to fetch creator profile.", "error");
             setSubmitting(false);
             return;
         }
 
         if (pictureLoading) {
-            alert("Please wait while your profile picture loads.");
+            showAlert("Please wait while your profile picture loads.", "warning");
             setSubmitting(false);
             return;
         }
 
         if (!postData.communityId) {
-            alert("Please select a community.");
+            showAlert("Please select a community.", "error");
             setSubmitting(false);
             return;
         }
@@ -117,20 +130,27 @@ const CreateDiscussion = () => {
             const result = await createDiscussion(discussionData, image, accessToken, true);
 
             if (result._id) {
-                alert("Post submitted successfully!");
-                navigate("/home");
+                showAlert("Post submitted successfully!", "success");
+                setTimeout(() => navigate("/home"), 1500);
             } else {
                 throw new Error("Failed to create post");
             }
         } catch (error) {
             console.error("Submit error:", error);
-            setSubmitError(error.response?.data?.error || "Failed to create post.");
+            showAlert(error.response?.data?.error || "Failed to create post.", "error");
         } finally {
             setSubmitting(false);
         }
     };
 
-    if (profileLoading || pictureLoading) return <p>Loading profile...</p>;
+    if (profileLoading || pictureLoading) {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+                <Spinner />
+            </div>
+        );
+    }
+
     if (profileError) return <p className="error">{profileError.message || profileError}</p>;
     if (pictureError) return <p className="error">Error loading picture: {pictureError}</p>;
 
@@ -227,6 +247,17 @@ const CreateDiscussion = () => {
                     />
                 </label>
             </form>
+
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={alert.open}
+                autoHideDuration={3000}
+                onClose={handleAlertClose}
+            >
+                <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+                    {alert.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

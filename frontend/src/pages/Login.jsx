@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import authService, { AuthenticationError } from "../services/authService";
 import useTogglePassword from "../hooks/Auth/useTogglePassword";
 import styles from "../styles/Login.module.css";
@@ -9,42 +12,45 @@ import projName from "../assets/proj-name.png";
 import csunite from '../assets/CSUnite.png';
 import BtnBack from "../components/BtnBack";
 
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const Login = () => {
     const [formData, setFormData] = useState({ id: "", password: "" });
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
     const { showPassword, togglePasswordVisibility } = useTogglePassword();
-
     const navigate = useNavigate();
+
+    const showAlert = (message, severity = "info") => {
+        setAlert({ open: true, message, severity });
+    };
+
+    const handleAlertClose = () => {
+        setAlert({ ...alert, open: false });
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(null);
 
         try {
             const data = await authService.login(formData);
 
             if (data.access_token) {
                 localStorage.setItem("accessToken", data.access_token);
-                setSuccess("Login successful!");
-                navigate("/home");
+                showAlert("Login successful!", "success");
+                setTimeout(() => navigate("/home"), 500);
             }
         } catch (err) {
             if (err instanceof AuthenticationError) {
-                setError(err.message);
+                showAlert(err.message, "error");
             } else {
-                setError("An unexpected error occurred. Please try again later.");
+                showAlert("An unexpected error occurred. Please try again later.", "error");
             }
         }
     };
-
 
     return (
         <div className={styles['main-container']}>
@@ -89,15 +95,24 @@ const Login = () => {
                             {showPassword ? <EyeOff size={20} color="#666" /> : <Eye size={20} color="#666" />}
                         </div>
                     </div>
-                    <div className={styles['error']}>
-                        {error && <p style={{ color: "red" }}>{error}</p>}
-                    </div>
                     <button className={styles['submit']} type="submit">Log In</button>
                 </form>
             </div>
+
             <div className={styles['bottom-section']}>
                 <img className={styles['bottom-background']} src={gate} alt="gate" />
             </div>
+
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={alert.open}
+                autoHideDuration={3000}
+                onClose={handleAlertClose}
+            >
+                <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+                    {alert.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

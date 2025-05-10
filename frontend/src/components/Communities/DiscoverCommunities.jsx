@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from "react";
 import CommunityCard from "./CommunityCard";
 import { motion } from "framer-motion";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import styles from "../../styles/Communities/CommunityCard.module.css";
 import { joinCommunity, fetchUnjoinedCommunities } from "../../services/communityService";
 import useStudentProfile from "../../hooks/Profile/useStudentProfile";
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
+
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
   const accessToken = useAuthRedirect();
   const { profile } = useStudentProfile(accessToken);
   const [communities, setCommunities] = useState([]);
   const [joinedCommunities, setJoinedCommunities] = useState([]);
+  const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
 
-  const IMAGE_BASE_URL = "http://localhost:5000/uploads/";
+  const IMAGE_BASE_URL = "http://localhost:5000/uploads/community/";
+
+  const showAlert = (message, severity = "info") => {
+    setAlert({ open: true, message, severity });
+  };
+
+  const handleAlertClose = () => {
+    setAlert({ ...alert, open: false });
+  };
 
   useEffect(() => {
     const loadCommunities = async () => {
@@ -22,6 +36,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
         setCommunities(unjoined);
       } catch (err) {
         console.error("Failed to fetch unjoined communities", err);
+        showAlert("Failed to load communities.", "error");
       }
     };
 
@@ -30,16 +45,16 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
 
   const handleJoin = async (communityId) => {
     if (!profile) {
-      alert("You must be logged in to join a community.");
+      showAlert("You must be logged in to join a community.", "warning");
       return;
     }
 
     try {
       await joinCommunity(accessToken, profile.IDNumber, communityId);
-      alert("Successfully joined the community!");
       setJoinedCommunities((prev) => [...prev, communityId]);
+      showAlert("Successfully joined the community!", "success");
     } catch (err) {
-      alert("Failed to join the community.");
+      showAlert("Failed to join the community.", "error");
     }
   };
 
@@ -91,6 +106,19 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
           ))}
         </motion.div>
       )}
+
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleAlertClose}
+        sx={{ mb: '64px' }}
+      >
+        <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 };

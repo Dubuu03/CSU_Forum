@@ -71,6 +71,23 @@ exports.approveCommunity = async (req, res) => {
     }
 };
 
+// Disapprove a community (Admin Only)
+exports.disapproveCommunity = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const community = await Community.findById(id);
+        if (!community) return res.status(404).json({ error: "Community not found" });
+
+        community.isApproved = false;
+        await community.save();
+
+        res.json({ message: "Community disapproved successfully", community });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 // Delete a community
 exports.deleteCommunity = async (req, res) => {
     try {
