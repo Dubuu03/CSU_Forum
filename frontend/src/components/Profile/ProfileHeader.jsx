@@ -3,21 +3,23 @@ import styles from "../../styles/Slider/ProfileSidebar.module.css";
 import { X } from "lucide-react";
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../../hooks/Profile/useStudentProfile";
-import useStudentPictures from "../../hooks/Profile/useStudentPictures";  // Import the useStudentPictures hook
+import useStudentPictures from "../../hooks/Profile/useStudentPictures";
+import useStudentCollege, { getCollegeShortcut } from "../../hooks/Profile/useStudentCollege";
+import useStudentCourse from "../../hooks/Profile/useStudentCourse";
 
 const ProfileHeader = ({ onClose }) => {
   const accessToken = useAuthRedirect();
-  const { profile, loading, error } = useStudentProfile(accessToken);
-  const { pictures, loading: picturesLoading, error: picturesError } = useStudentPictures(accessToken); // Fetch profile pictures using the hook
+  const { profile } = useStudentProfile(accessToken);
+  const { pictures } = useStudentPictures(accessToken);
+  const { college } = useStudentCollege(accessToken);
+  const { course } = useStudentCourse(accessToken);
 
   const FirstName = profile?.FirstName || "Guest";
   const LastName = profile?.LastName || "User";
   const username = `${FirstName} ${LastName}`;
-
   const profileImageUrl = pictures?.profpic || "";
-  const avatarText = profileImageUrl ? "" : FirstName.charAt(0).toUpperCase(); // First letter of the first name if no image
-
-  const status = "Online";
+  const avatarText = profileImageUrl ? "" : FirstName.charAt(0).toUpperCase();
+  const collegeShortcut = getCollegeShortcut(college?.label || "");
 
   return (
     <div className={styles.profileHeader}>
@@ -26,7 +28,6 @@ const ProfileHeader = ({ onClose }) => {
       </button>
       <div className={styles.userInfo}>
         <div className={styles.profilePicContainer}>
-          {/* Show the profile image if available, otherwise show the initial letter */}
           {profileImageUrl ? (
             <img
               src={profileImageUrl}
@@ -34,17 +35,13 @@ const ProfileHeader = ({ onClose }) => {
               className={styles.profilePic}
             />
           ) : (
-            <div className={styles.profilePic}>
-              {avatarText || "?"} {/* Display the first letter of the name or "?" if no name */}
-            </div>
+            <div className={styles.profilePic}>{avatarText || "?"}</div>
           )}
         </div>
         <p className={styles.username}>{username}</p>
-        <span
-          className={`${styles.status} ${status === "Online" ? styles.online : styles.offline}`}
-        >
-          Online Status: {status === "Online" ? "On" : "Off"}
-        </span>
+        <p className={styles.detail}>
+          {collegeShortcut} - {course || "Unknown Course"}
+        </p>
       </div>
     </div>
   );
