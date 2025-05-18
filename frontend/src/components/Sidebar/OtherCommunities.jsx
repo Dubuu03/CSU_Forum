@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../styles/Slider/Sidebar.module.css";
-import { ChevronDown, Component } from "lucide-react";
+import { ChevronDown, ChevronUp, Component } from "lucide-react";
 
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../../hooks/Profile/useStudentProfile";
@@ -11,6 +11,7 @@ const OtherCommunities = () => {
     const accessToken = useAuthRedirect();
     const { profile } = useStudentProfile(accessToken);
     const [userCommunities, setUserCommunities] = useState([]);
+    const [expanded, setExpanded] = useState(true);
 
     useEffect(() => {
         const loadCommunities = async () => {
@@ -29,29 +30,29 @@ const OtherCommunities = () => {
 
     return (
         <div className={styles.otherCommunities}>
-            <span>
+            <span onClick={() => setExpanded((prev) => !prev)} style={{ cursor: "pointer" }}>
                 OTHER COMMUNITIES
-                <ChevronDown size={18} color="#7d7d7d" />
+                {expanded ? <ChevronUp size={18} color="#7d7d7d" /> : <ChevronDown size={18} color="#7d7d7d" />}
             </span>
-            <ul className={styles.otherCommunitiesList}>
-                {userCommunities.length === 0 ? (
-                    <li style={{ color: "#888", fontSize: "14px", paddingLeft: "10px" }}>
-                        No joined communities
-                    </li>
-                ) : (
-                    userCommunities.map((community) => (
-                        <li key={community._id}>
-                            <Link
-                                to={`/communities/${community._id}`}
-                                title={community.name}
-                            >
-                                <Component size={18} color="#434343" />
-                                {community.name}
-                            </Link>
+
+            {expanded && (
+                <ul className={styles.otherCommunitiesList}>
+                    {userCommunities.length === 0 ? (
+                        <li style={{ color: "#888", fontSize: "14px", paddingLeft: "10px" }}>
+                            No joined communities
                         </li>
-                    ))
-                )}
-            </ul>
+                    ) : (
+                        userCommunities.map((community) => (
+                            <li key={community._id}>
+                                <Link to={`/communities/${community._id}`} title={community.name}>
+                                    <Component size={18} color="#434343" />
+                                    {community.name}
+                                </Link>
+                            </li>
+                        ))
+                    )}
+                </ul>
+            )}
         </div>
     );
 };

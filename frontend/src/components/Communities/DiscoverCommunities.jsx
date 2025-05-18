@@ -87,7 +87,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
           drag="x"
           dragConstraints={{ left: -200, right: 0 }}
         >
-          {filteredCommunities.map((community) => (
+          {filteredCommunities.slice(0, 10).map((community) => (
             <CommunityCard
               key={community._id}
               communityId={community._id}
@@ -104,6 +104,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
               joined={joinedCommunities.includes(community._id)}
             />
           ))}
+
         </motion.div>
       )}
 
