@@ -139,7 +139,7 @@ const CreateDiscussion = () => {
                 authorImage: pictures?.profpic || "",
             };
 
-            const result = await createDiscussion(discussionData, image, accessToken, true);
+            const result = await createDiscussion(discussionData, image, accessToken);
 
             if (result._id) {
                 showAlert("Post submitted successfully!", "success");

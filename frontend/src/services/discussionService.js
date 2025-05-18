@@ -2,12 +2,11 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-
-//Create a new discussion post
+// Create a new discussion post
 export const createDiscussion = async (discussionData, image, accessToken, useJson = false) => {
     try {
         let data;
-        let headers = {
+        const headers = {
             'Authorization': `Bearer ${accessToken}`
         };
 
@@ -18,7 +17,7 @@ export const createDiscussion = async (discussionData, image, accessToken, useJs
                 content: discussionData.content,
                 authorId: discussionData.authorId,
                 authorName: discussionData.authorName,
-                authorImage: discussionData.authorImage, // <-- Added
+                authorImage: discussionData.authorImage,
                 community: discussionData.communityId,
                 tags: discussionData.tags
             };
@@ -29,28 +28,31 @@ export const createDiscussion = async (discussionData, image, accessToken, useJs
 
             headers['Content-Type'] = 'application/json';
         } else {
-            // FormData payload
+            // FormData payload (for file upload)
             data = new FormData();
 
             data.append('title', discussionData.title);
             data.append('content', discussionData.content);
             data.append('authorId', discussionData.authorId);
             data.append('authorName', discussionData.authorName);
-            data.append('authorImage', discussionData.authorImage); // <-- Added
+            data.append('authorImage', discussionData.authorImage);
             data.append('community', discussionData.communityId);
 
-            if (discussionData.tags && discussionData.tags.length > 0) {
-                data.append('tags', discussionData.tags);
+            // Tags as comma-separated string or array
+            if (discussionData.tags) {
+                const tags = Array.isArray(discussionData.tags)
+                    ? discussionData.tags.join(',')
+                    : discussionData.tags;
+                data.append('tags', tags);
             }
 
+            // Attach image if it's a File
             if (image && image instanceof File) {
                 data.append('image', image);
             }
 
             headers['Content-Type'] = 'multipart/form-data';
         }
-
-        console.log('Sending data to API:', data);
 
         const response = await axios.post(
             `${API_BASE_URL}/discussions`,
@@ -65,20 +67,14 @@ export const createDiscussion = async (discussionData, image, accessToken, useJs
     }
 };
 
-
 // Fetch all discussions
-
 export const fetchDiscussions = async (accessToken) => {
     try {
-        const response = await axios.get(
-            `${API_BASE_URL}/discussions`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+        const response = await axios.get(`${API_BASE_URL}/discussions`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
             }
-        );
-
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching discussions:', error);
@@ -87,18 +83,13 @@ export const fetchDiscussions = async (accessToken) => {
 };
 
 // Fetch a single discussion by ID
-
 export const fetchDiscussionById = async (discussionId, accessToken) => {
     try {
-        const response = await axios.get(
-            `${API_BASE_URL}/discussions/${discussionId}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+        const response = await axios.get(`${API_BASE_URL}/discussions/${discussionId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
             }
-        );
-
+        });
         return response.data;
     } catch (error) {
         console.error(`Error fetching discussion ${discussionId}:`, error);
@@ -107,18 +98,13 @@ export const fetchDiscussionById = async (discussionId, accessToken) => {
 };
 
 // Fetch discussions by community ID
-
 export const fetchDiscussionsByCommunity = async (communityId, accessToken) => {
     try {
-        const response = await axios.get(
-            `${API_BASE_URL}/discussions/community/${communityId}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+        const response = await axios.get(`${API_BASE_URL}/discussions/community/${communityId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
             }
-        );
-
+        });
         return response.data;
     } catch (error) {
         console.error(`Error fetching discussions for community ${communityId}:`, error);
@@ -127,18 +113,13 @@ export const fetchDiscussionsByCommunity = async (communityId, accessToken) => {
 };
 
 // Delete a discussion by ID
-
 export const deleteDiscussion = async (discussionId, accessToken) => {
     try {
-        const response = await axios.delete(
-            `${API_BASE_URL}/discussions/${discussionId}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+        const response = await axios.delete(`${API_BASE_URL}/discussions/${discussionId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
             }
-        );
-
+        });
         return response.data;
     } catch (error) {
         console.error(`Error deleting discussion ${discussionId}:`, error);
@@ -147,18 +128,22 @@ export const deleteDiscussion = async (discussionId, accessToken) => {
 };
 
 // Update a discussion by ID
-
 export const updateDiscussion = async (discussionId, updateData, image, accessToken) => {
     try {
         const formData = new FormData();
 
-        // Add discussion update data to form
         if (updateData.title) formData.append('title', updateData.title);
         if (updateData.content) formData.append('content', updateData.content);
-        if (updateData.tags) formData.append('tags', updateData.tags);
 
-        // Add image if it exists
-        if (image) {
+        // Normalize tags
+        if (updateData.tags) {
+            const tags = Array.isArray(updateData.tags)
+                ? updateData.tags.join(',')
+                : updateData.tags;
+            formData.append('tags', tags);
+        }
+
+        if (image && image instanceof File) {
             formData.append('image', image);
         }
 
@@ -168,7 +153,7 @@ export const updateDiscussion = async (discussionId, updateData, image, accessTo
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data'
                 }
             }
         );

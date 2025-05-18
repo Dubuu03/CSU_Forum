@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/Slider/Sidebar.module.css";
-import { ChevronDown, Component } from "lucide-react";
+import { ChevronDown, ChevronUp, Component } from "lucide-react";
 
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 import useStudentCollege from "../../hooks/Profile/useStudentCollege";
 
-// Reuse the same COLLEGES map used in your hook
 const COLLEGES = new Map([
   ["coea", { label: "College of Engineering and Architecture", color: "#ba0d0d" }],
   ["cics", { label: "College of Information and Computing Sciences", color: "#ba660d" }],
@@ -18,7 +17,6 @@ const COLLEGES = new Map([
   ["chk", { label: "College of Human Kinetics", color: "#1b0dba" }],
 ]);
 
-// Utility to extract shortcut (e.g., "CICS") from college label
 const getCollegeShortcut = (label) => {
   for (const [key, value] of COLLEGES.entries()) {
     if (value.label === label) {
@@ -34,6 +32,8 @@ const MainCommunities = () => {
 
   const collegeShortcut = loading ? "Loading..." : getCollegeShortcut(college.label);
 
+  const [expanded, setExpanded] = useState(true);
+
   const mainCommunities = [
     { name: "CSU - Carig", link: "/communities/csu-carig" },
     { name: collegeShortcut, link: `/communities/${collegeShortcut.toLowerCase()}` },
@@ -41,20 +41,22 @@ const MainCommunities = () => {
 
   return (
     <div className={styles.mainCommunity}>
-      <span>
+      <span onClick={() => setExpanded((prev) => !prev)} style={{ cursor: "pointer" }}>
         MAIN COMMUNITY
-        <ChevronDown size={18} color="#7d7d7d" />
+        {expanded ? <ChevronUp size={18} color="#7d7d7d" /> : <ChevronDown size={18} color="#7d7d7d" />}
       </span>
-      <ul className={styles.mainCommunityList}>
-        {mainCommunities.map((community, index) => (
-          <li key={index}>
-            <a href={community.link}>
-              <Component size={18} color="#434343" />
-              {community.name}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {expanded && (
+        <ul className={styles.mainCommunityList}>
+          {mainCommunities.map((community, index) => (
+            <li key={index}>
+              <a href={community.link}>
+                <Component size={18} color="#434343" />
+                {community.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

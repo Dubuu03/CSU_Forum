@@ -6,13 +6,37 @@ const createDiscussion = async (req, res) => {
         const {
             title,
             content,
-            image,
             authorId,
             authorName,
             authorImage,
-            community,     
+            community,
             tags
         } = req.body;
+
+        // Fallback: handle missing required fields early
+        if (!title || !content || !authorId || !authorName || !community) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        let image = null;
+
+        // Handle image from multer (file upload)
+        if (req.file) {
+            image = req.file.filename;
+        }
+
+        // Handle optional base64 or direct URL image
+        if (req.body.image && !req.file) {
+            image = req.body.image;
+        }
+
+        // Normalize tags to array
+        const tagArray =
+            typeof tags === "string"
+                ? tags.split(",").map(tag => tag.trim()).filter(tag => tag !== "")
+                : Array.isArray(tags)
+                    ? tags
+                    : [];
 
         const newDiscussion = new Discussion({
             title,
@@ -22,7 +46,7 @@ const createDiscussion = async (req, res) => {
             authorName,
             authorImage,
             community,
-            tags
+            tags: tagArray,
         });
 
         await newDiscussion.save();
@@ -32,7 +56,6 @@ const createDiscussion = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
-
 
 
 // Get all discussions
