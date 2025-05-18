@@ -6,9 +6,15 @@ import DiscussionList from "../components/Community/DiscussionList";
 import Navbar from "../components/Navbar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
 import styles from "../styles/Community/CommunityPage.module.css";
-import { fetchCommunityById } from "../services/communityService";
+import {
+  fetchCommunityById,
+  fetchUserCommunities,
+  joinCommunity,
+  leaveCommunity,
+} from "../services/communityService";
 import { fetchDiscussionsByCommunity } from "../services/discussionService";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
+import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentPictures from "../hooks/Profile/useStudentPictures";
 
 const toTitleCase = (str) =>
@@ -17,12 +23,14 @@ const toTitleCase = (str) =>
 const CommunityPage = () => {
   const { communityId } = useParams();
   const accessToken = useAuthRedirect();
+  const { profile } = useStudentProfile(accessToken);
   const { pictures } = useStudentPictures(accessToken);
 
   const [communityData, setCommunityData] = useState(null);
   const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [isMember, setIsMember] = useState(false);
+  const [memberCount, setMemberCount] = useState(0);
   const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -34,6 +42,7 @@ const CommunityPage = () => {
         ]);
 
         setCommunityData({
+          id: community._id,
           name: community.name,
           organizer: toTitleCase(community.creatorName),
           date: new Date(community.createdAt).toLocaleDateString("en-US", {
@@ -41,10 +50,11 @@ const CommunityPage = () => {
             month: "long",
             day: "numeric",
           }),
-          members: community.memberIds?.length || 0,
           tags: community.tags || [],
           posts: discussionList.length,
         });
+
+        setMemberCount(community.memberIds?.length || 0);
 
         const formattedDiscussions = discussionList.map(disc => ({
           title: disc.title,
@@ -80,6 +90,38 @@ const CommunityPage = () => {
     loadCommunityData();
   }, [communityId, accessToken, pictures]);
 
+  useEffect(() => {
+    const checkMembership = async () => {
+      if (!profile?.IDNumber || !communityId) return;
+      try {
+        const userCommunities = await fetchUserCommunities(profile.IDNumber);
+        const isJoined = userCommunities.some((c) => c._id === communityId);
+        setIsMember(isJoined);
+      } catch (err) {
+        console.error("Error checking membership:", err);
+      }
+    };
+    checkMembership();
+  }, [profile, communityId]);
+
+  const handleToggleMembership = async () => {
+    if (!accessToken || !profile?.IDNumber || !communityId) return;
+
+    try {
+      if (isMember) {
+        await leaveCommunity(accessToken, profile.IDNumber, communityId);
+        setIsMember(false);
+        setMemberCount(prev => Math.max(0, prev - 1));
+      } else {
+        await joinCommunity(accessToken, profile.IDNumber, communityId);
+        setIsMember(true);
+        setMemberCount(prev => prev + 1);
+      }
+    } catch (err) {
+      console.error("Error toggling membership:", err);
+    }
+  };
+
   if (loading) return <div className={styles.pageContainer}>Loading community...</div>;
   if (!communityData) return <div className={styles.pageContainer}>Community not found.</div>;
 
@@ -94,10 +136,13 @@ const CommunityPage = () => {
         name={communityData.name}
         organizer={communityData.organizer}
         date={communityData.date}
-        members={communityData.members}
+        members={memberCount}
         posts={communityData.posts}
         tags={communityData.tags}
         onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+        communityId={communityData.id}
+        isMember={isMember}
+        onToggleMembership={handleToggleMembership}
       />
 
       <CommunityTabs tabs={["Discussions", "Announcements", "Events"]} />
