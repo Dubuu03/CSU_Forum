@@ -85,7 +85,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           drag="x"
-          dragConstraints={{ left: -200, right: 0 }}
+          dragConstraints={{ left: -1100, right: 0 }}
         >
           {filteredCommunities.slice(0, 10).map((community) => (
             <CommunityCard

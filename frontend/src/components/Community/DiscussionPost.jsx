@@ -3,12 +3,11 @@ import styles from "../../styles/Community/Discussion.module.css";
 import { Dot, ArrowBigDown, ArrowBigUp, MessageCircle } from "lucide-react";
 
 const DiscussionPost = ({ post }) => {
-  const tagArray =
-    typeof post.tags === "string"
-      ? post.tags.split(",").map(tag => tag.trim()).filter(tag => tag !== "")
-      : Array.isArray(post.tags)
-        ? post.tags.filter(tag => tag.trim() !== "")
-        : [];
+  const tagArray = Array.isArray(post.tags)
+    ? post.tags.flatMap(tag => tag.split(",").map(t => t.trim())).filter(t => t)
+    : typeof post.tags === "string"
+      ? post.tags.split(",").map(t => t.trim()).filter(t => t)
+      : [];
 
   return (
     <div className={styles.post}>
@@ -35,7 +34,6 @@ const DiscussionPost = ({ post }) => {
 
         <p className={styles.content}>{post.content}</p>
 
-        {}
         {post.postSrc && post.postSrc.trim() !== "" && (
           <div className={styles.postImage}>
             <img src={post.postSrc} alt="Post image" />
