@@ -71,6 +71,23 @@ exports.approveCommunity = async (req, res) => {
     }
 };
 
+// Approve all pending communities (Admin Only)
+exports.approveAllPendingCommunities = async (req, res) => {
+    try {
+        const pendingCommunities = await Community.find({ isApproved: false });
+
+        if (pendingCommunities.length === 0) {
+            return res.json({ message: "No pending communities to approve." });
+        }
+
+        await Community.updateMany({ isApproved: false }, { $set: { isApproved: true } });
+
+        res.json({ message: "All pending communities have been approved successfully." });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Disapprove a community (Admin Only)
 exports.disapproveCommunity = async (req, res) => {
     try {

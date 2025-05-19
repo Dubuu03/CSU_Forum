@@ -14,6 +14,10 @@ router.get("/", communityController.getCommunities);
 // Fetch all pending communities
 router.get("/pending", communityController.getPendingCommunities);
 
+// Approve all pending communities
+router.post("/approve-all", communityController.approveAllPendingCommunities);
+
+
 // Get a specific community by ID
 router.get("/:id", communityController.getCommunityById);
 
