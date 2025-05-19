@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import CommunityCard from "./CommunityCard";
 import { motion } from "framer-motion";
 import Snackbar from "@mui/material/Snackbar";
@@ -10,6 +10,16 @@ import useStudentProfile from "../../hooks/Profile/useStudentProfile";
 import useAuthRedirect from "../../hooks/Auth/useAuthRedirect";
 
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
+
+// Fisher-Yates shuffle helper
+const shuffleArray = (array) => {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 
 const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
   const accessToken = useAuthRedirect();
@@ -58,36 +68,48 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
     }
   };
 
+  // Filter communities by selected tag
   const filteredByTag = selectedTag
-    ? communities.filter((c) =>
-      Array.isArray(c.tags) &&
-      c.tags.map(t => t.toLowerCase()).includes(selectedTag.toLowerCase())
+    ? communities.filter(
+      (c) =>
+        Array.isArray(c.tags) &&
+        c.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase())
     )
     : communities;
 
+  // Sort by member count descending
   const sortedByMembers = [...filteredByTag].sort(
     (a, b) => (b.memberIds?.length || 0) - (a.memberIds?.length || 0)
   );
 
+  // Filter out top communities if no tag selected
   const filteredCommunities = selectedTag
     ? sortedByMembers
-    : sortedByMembers.filter(c => !topCommunityIds.includes(c._id));
+    : sortedByMembers.filter((c) => !topCommunityIds.includes(c._id));
+
+  // Shuffle and slice the communities once per render using useMemo
+  const randomizedCommunities = useMemo(() => {
+    return shuffleArray(filteredCommunities).slice(0, 10);
+  }, [filteredCommunities]);
+
+  const isTagSelected = Boolean(selectedTag);
 
   return (
     <div className={styles.discoverSection}>
       <span>Discover Communities</span>
-      {filteredCommunities.length === 0 ? (
+      {randomizedCommunities.length === 0 ? (
         <p className={styles.noCommunitiesText}>No communities found</p>
       ) : (
         <motion.div
-          className={styles.communityList}
+          className={selectedTag ? styles.communityListGridTwoColumns : styles.communityList}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           drag="x"
-          dragConstraints={{ left: -1100, right: 0 }}
+          dragConstraints={selectedTag ? { left: -250, right: 0 } : { left: -1100, right: 0 }}
         >
-          {filteredCommunities.slice(0, 10).map((community) => (
+
+          {randomizedCommunities.map((community) => (
             <CommunityCard
               key={community._id}
               communityId={community._id}
@@ -102,9 +124,9 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
               isTopList={false}
               onJoin={handleJoin}
               joined={joinedCommunities.includes(community._id)}
+              isTagSelected={isTagSelected} // pass flag to card if needed
             />
           ))}
-
         </motion.div>
       )}
 
@@ -113,13 +135,12 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
         open={alert.open}
         autoHideDuration={3000}
         onClose={handleAlertClose}
-        sx={{ mb: '64px' }}
+        sx={{ mb: "64px" }}
       >
         <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
           {alert.message}
         </Alert>
       </Snackbar>
-
     </div>
   );
 };

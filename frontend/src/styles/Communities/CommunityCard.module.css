@@ -108,13 +108,25 @@
 }
 
 .imageContainer {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 40px; /* or any width you want */
+  height: 40px; /* same as width to keep perfect circle */
+  border-radius: 50%; /* makes circle */
+  overflow: hidden; /* hide overflow */
   margin-right: 10px;
 }
 
 .imageContainer img {
-  width: 100%;
-  height: 100%;
+  width: 100%; /* fill container width */
+  height: 100%; /* fill container height */
+  object-fit: cover; /* crop to cover container without distortion */
+  display: block; /* remove inline spacing */
+  border-radius: 50%; /* make image itself circular inside container */
+}
+.communityListGridTwoColumns {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  width: 200%;
+  gap: 7px;
+  scroll-snap-type: x mandatory;
 }
