@@ -97,7 +97,7 @@ const TopCommunities = ({ setTopCommunityIds }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           drag="x"
-          dragConstraints={{ left: -200, right: 0 }}
+          dragConstraints={{ left: -300, right: 0 }}
         >
           {topCommunities.map((community) => (
             <CommunityCard

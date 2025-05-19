@@ -38,16 +38,17 @@
     justify-content: start;
     position: relative;
     top: -4px;
+    width: 100%;
   }
   
   .userInfo {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     display: flex;
     align-items: center;
   }
   
   .postTitle {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
     position: relative;
     top: -4px;
@@ -69,7 +70,7 @@
   }
   
   .content {
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     margin-bottom: 4px;
   }
   

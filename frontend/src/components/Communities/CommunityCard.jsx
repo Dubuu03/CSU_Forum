@@ -71,7 +71,9 @@ const CommunityCard = ({
             >
                 <div className={styles.communityInfo}>
                     {image ? (
-                        <img src={image} alt={name} className={styles.avatar} />
+                        <div className={styles.imageContainer}>
+                            <img src={image} alt={name} className={styles.avatar} />
+                        </div>    
                     ) : (
                         <div className={`${styles.avatar} ${styles.fallbackAvatar}`}>
                             {name?.charAt(0).toUpperCase()}
