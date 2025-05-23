@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const communityRoutes = require("./routes/communityRoutes");
 const discussionRoutes = require("./routes/discussionRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/uploads/", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/communities", communityRoutes);
 app.use("/api/discussions", discussionRoutes);
+app.use("/api/comments", commentRoutes);
 
 
 connectDB();

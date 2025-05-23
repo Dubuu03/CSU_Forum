@@ -8,6 +8,10 @@ const commentSchema = new mongoose.Schema({
     replies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
+    upvoters: [{ type: String }],
+    downvoters: [{ type: String }],
+    isReply: { type: Boolean, default: false },
+    isEdited: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 
