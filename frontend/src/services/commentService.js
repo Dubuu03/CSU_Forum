@@ -101,14 +101,24 @@ const addReplyToComment = async (commentId, replyData, token) => {
         },
     };
 
-    const response = await axios.post(
-        `${API_URL}/${commentId}/reply`,
-        replyData,
-        config
-    );
+    const response = await axios.post(`${API_URL}/${commentId}/reply`, replyData, config);
     return response.data;
 };
 
+// Export individual functions for direct import
+export {
+    createComment,
+    getCommentsByDiscussionId,
+    getCommentById,
+    updateComment,
+    deleteComment,
+    upvoteComment,
+    downvoteComment,
+    getCommentReplies,
+    addReplyToComment
+};
+
+// Also export as default object for backward compatibility
 const commentService = {
     createComment,
     getCommentsByDiscussionId,

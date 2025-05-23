@@ -129,11 +129,33 @@ const deleteDiscussion = async (req, res) => {
 // Upvote a discussion
 const upvoteDiscussion = async (req, res) => {
     const { discussionId } = req.params;
+    const { userId } = req.body; // Get the user ID from the request
+
+    if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+    }
+
     try {
         const discussion = await Discussion.findById(discussionId);
         if (!discussion) return res.status(404).json({ error: "Discussion not found" });
 
-        discussion.upvotes += 1;
+        // Check if user already upvoted this discussion
+        if (discussion.upvoters.includes(userId)) {
+            // User already upvoted, remove the upvote (toggle behavior)
+            discussion.upvoters = discussion.upvoters.filter(id => id !== userId);
+            discussion.upvotes = Math.max(0, discussion.upvotes - 1);
+        } else {
+            // User hasn't upvoted, add upvote
+            discussion.upvoters.push(userId);
+            discussion.upvotes += 1;
+
+            // If user previously downvoted, remove the downvote
+            if (discussion.downvoters.includes(userId)) {
+                discussion.downvoters = discussion.downvoters.filter(id => id !== userId);
+                discussion.downvotes = Math.max(0, discussion.downvotes - 1);
+            }
+        }
+
         await discussion.save();
         res.status(200).json(discussion);
     } catch (err) {
@@ -145,11 +167,33 @@ const upvoteDiscussion = async (req, res) => {
 // Downvote a discussion
 const downvoteDiscussion = async (req, res) => {
     const { discussionId } = req.params;
+    const { userId } = req.body; // Get the user ID from the request
+
+    if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+    }
+
     try {
         const discussion = await Discussion.findById(discussionId);
         if (!discussion) return res.status(404).json({ error: "Discussion not found" });
 
-        discussion.downvotes += 1;
+        // Check if user already downvoted this discussion
+        if (discussion.downvoters.includes(userId)) {
+            // User already downvoted, remove the downvote (toggle behavior)
+            discussion.downvoters = discussion.downvoters.filter(id => id !== userId);
+            discussion.downvotes = Math.max(0, discussion.downvotes - 1);
+        } else {
+            // User hasn't downvoted, add downvote
+            discussion.downvoters.push(userId);
+            discussion.downvotes += 1;
+
+            // If user previously upvoted, remove the upvote
+            if (discussion.upvoters.includes(userId)) {
+                discussion.upvoters = discussion.upvoters.filter(id => id !== userId);
+                discussion.upvotes = Math.max(0, discussion.upvotes - 1);
+            }
+        }
+
         await discussion.save();
         res.status(200).json(discussion);
     } catch (err) {

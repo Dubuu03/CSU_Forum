@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
 import CreateDiscussion from "./pages/CreateDiscussion";
 import UnderDevelopment from "./pages/UnderDevelopment";
+import DiscussionDetailPage from "./pages/DiscussionDetailPage";
 
 import "./App.css";
 
@@ -22,7 +23,11 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/discussion" element={<CreateDiscussion />} />
+        <Route path="/discussion" element={<CreateDiscussion />} />        {/* Discussions */}
+        <Route
+          path="/discussions/:discussionId"
+          element={<DiscussionDetailPage />}
+        />
 
         {/* Communities */}
         <Route path="/communities" element={<Communities />} />

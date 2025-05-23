@@ -54,9 +54,8 @@ const CommunityPage = () => {
           posts: discussionList.length,
         });
 
-        setMemberCount(community.memberIds?.length || 0);
-
-        const formattedDiscussions = discussionList.map(disc => ({
+        setMemberCount(community.memberIds?.length || 0); const formattedDiscussions = discussionList.map(disc => ({
+          _id: disc._id,
           title: disc.title,
           author: toTitleCase(disc.authorName),
           date: new Date(disc.createdAt).toLocaleDateString("en-US", {
@@ -77,6 +76,8 @@ const CommunityPage = () => {
               : "/src/assets/default-profile.png",
           likes: disc.upvotes || 0,
           comments: disc.comments?.length || 0,
+          upvoters: disc.upvoters || [],
+          downvoters: disc.downvoters || [],
         }));
 
         setDiscussions(formattedDiscussions);
