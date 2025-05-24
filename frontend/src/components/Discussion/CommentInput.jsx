@@ -9,15 +9,7 @@ const CommentInput = ({ onAddComment, parentId = null, userImage }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (comment.trim() === "") return;
-    const newComment = {
-      id: Date.now(),
-      parentId, // null for top-level comments, set to parent's id for replies
-      author: "CurrentUser", // Replace with actual logged-in user information
-      date: new Date().toLocaleDateString(),
-      text: comment,
-      replies: [],
-    };
-    onAddComment(newComment);
+    onAddComment(comment); // Only send the comment text
     setComment("");
   };
 
