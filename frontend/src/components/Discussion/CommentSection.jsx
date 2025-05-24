@@ -4,7 +4,7 @@ import CommentInput from "./CommentInput";
 import CommentList from "./CommentList";
 import styles from "../../styles/Discussion/CommentSection.module.css";
 
-const CommentSection = ({ comments, userImage, onAddComment, commentLoading }) => {
+const CommentSection = ({ comments, userImage, onAddComment, onAddReply, commentLoading }) => {
   // Map backend comments to frontend shape
   const mapComment = (c) => ({
     id: c._id || c.id,
@@ -20,7 +20,7 @@ const CommentSection = ({ comments, userImage, onAddComment, commentLoading }) =
   return (
     <div className={styles.commentSection}>
       <CommentInput onAddComment={onAddComment} userImage={userImage} loading={commentLoading} />
-      <CommentList comments={mappedComments} />
+      <CommentList comments={mappedComments} onAddReply={onAddReply} userImage={userImage} />
     </div>
   );
 };

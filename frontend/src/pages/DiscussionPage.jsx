@@ -79,6 +79,38 @@ const DiscussionPage = () => {
     }
   };
 
+  // Handle posting a reply to a comment (nested)
+  const handleAddReply = async (content, parentCommentId) => {
+    if (!profile || !accessToken) return;
+    setCommentLoading(true);
+    try {
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
+      const formatMulti = str => str ? str.split(' ').map(cap).join(' ') : '';
+      const authorName = profile.FirstName && profile.LastName
+        ? `${formatMulti(profile.FirstName)} ${formatMulti(profile.LastName)}`.trim()
+        : profile.fullName || profile.name || "Anonymous";
+      await createComment(
+        {
+          content,
+          authorId: profile.IDNumber,
+          authorName,
+          authorImage: (pictures && pictures.profpic) || profile.profilePic || profilePic,
+          parentId: parentCommentId,
+          isReply: true,
+          replyToCommentId: parentCommentId,
+        },
+        accessToken
+      );
+      // Reload all comments after posting a reply
+      const updatedComments = await getCommentsByDiscussionId(discussionId);
+      setComments(updatedComments);
+    } catch (err) {
+      setError("Failed to post reply.");
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className={styles.mainContainer} style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 300 }}>
@@ -133,6 +165,7 @@ const DiscussionPage = () => {
           comments={comments}
           userImage={(pictures && pictures.profpic) || profile?.profilePic || profilePic}
           onAddComment={handleAddComment}
+          onAddReply={handleAddReply}
           commentLoading={commentLoading}
         />
       </div>
