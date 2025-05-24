@@ -4,6 +4,7 @@ const commentSchema = new mongoose.Schema({
     content: { type: String, required: true },
     authorId: { type: String, required: true },
     authorName: { type: String, required: true },
+    authorImage: { type: String },
     parentId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Discussion" },
     replies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     upvotes: { type: Number, default: 0 },

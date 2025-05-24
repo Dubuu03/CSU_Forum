@@ -3,13 +3,14 @@ const Discussion = require('../models/Discussion');
 
 // Create a new comment
 exports.createComment = async (req, res) => {
-    const { content, authorId, authorName, parentId, isReply, replyToCommentId } = req.body;
+    const { content, authorId, authorName, authorImage, parentId, isReply, replyToCommentId } = req.body;
 
     try {
         const newComment = new Comment({
             content,
             authorId,
             authorName,
+            authorImage, // save image
             parentId, // This is the discussion ID for top-level comments, or the parent comment ID for replies
             isReply: isReply || false
         });
@@ -247,7 +248,7 @@ exports.getCommentReplies = async (req, res) => {
 // Add a reply to a comment
 exports.addReplyToComment = async (req, res) => {
     const { commentId } = req.params;
-    const { content, authorId, authorName } = req.body;
+    const { content, authorId, authorName, authorImage } = req.body;
 
     try {
         const parentComment = await Comment.findById(commentId);
@@ -260,6 +261,7 @@ exports.addReplyToComment = async (req, res) => {
             content,
             authorId,
             authorName,
+            authorImage, // save image
             parentId: commentId, // Set the parent as the comment being replied to
             isReply: true
         });
