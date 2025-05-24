@@ -15,6 +15,10 @@
   border-bottom: 1px solid #c9c9c9;
 }
 
+.noBorder {
+  border-bottom: none !important;
+}
+
 .userAvatar {
   width: 40px;
   height: 40px;
