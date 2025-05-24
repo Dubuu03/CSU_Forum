@@ -39,7 +39,6 @@ A community forum web app built with React, featuring user authentication, commu
 
   ```bash
   git clone https://github.com/Dubuu03/CSUForum.git
-  cd CSUForum
   ```
 
 - **Install dependencies:**
@@ -50,7 +49,6 @@ A community forum web app built with React, featuring user authentication, commu
 
 - **Configure environment variables**
 
-  *(Add instructions here if needed, e.g. create `.env` files)*
 
 - **Run the development servers:**
 
