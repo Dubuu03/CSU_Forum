@@ -195,10 +195,12 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
                 stroke="currentColor"
                 fill={isDownvoted ? "currentColor" : "none"}
               />
-            </button>
-          </div>
-          <button className={styles.commentButton}>
-            <MessageCircle size={20} /> {post.comments}
+            </button>          </div>
+          <button className={styles.commentButton} onClick={(e) => {
+            e.stopPropagation();
+            navigateToDiscussion();
+          }}>
+            <MessageCircle size={17 } /> {post.comments}
           </button>
         </div>
       </div>

@@ -123,6 +123,8 @@ const campusMapData = "https://maps.app.goo.gl/matSesDRNYDgxg7H6";
 const Home = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [keyword, setKeyword] = useState("");
     return (
         <div className={styles.mainContainer}>
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -132,6 +134,10 @@ const Home = () => {
                     logo={projName}
                     onOpenSidebar={() => setSidebarOpen(true)}
                     onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+                    keyword={keyword}
+                    setKeyword={setKeyword}
+                    isSearchOpen={isSearchOpen}
+                    setIsSearchOpen={setIsSearchOpen}
                 />
                 <FeaturedEvents events={event} />
                 <LatestAnnouncements announcements={announcementData} />

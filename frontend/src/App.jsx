@@ -10,6 +10,7 @@ import CommunityPage from "./pages/CommunityPage";
 import CreateDiscussion from "./pages/CreateDiscussion";
 import UnderDevelopment from "./pages/UnderDevelopment";
 import DiscussionDetailPage from "./pages/DiscussionDetailPage";
+import DiscussionFab from "./pages/DiscussionFab ";
 
 import "./App.css";
 
@@ -23,11 +24,17 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/discussion" element={<CreateDiscussion />} />        {/* Discussions */}
+        <Route path="/discussion/:communityId" element={<DiscussionFab />} />
+        <Route path="/discussion/" element={<CreateDiscussion />} />
         <Route
           path="/discussions/:discussionId"
           element={<DiscussionDetailPage />}
         />
+        <Route
+          path="/discussions/:communityId"
+          element={<DiscussionFab />}
+        />
+
 
         {/* Communities */}
         <Route path="/communities" element={<Communities />} />

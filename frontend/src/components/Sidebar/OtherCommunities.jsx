@@ -16,7 +16,6 @@ const OtherCommunities = () => {
     useEffect(() => {
         const loadCommunities = async () => {
             if (!profile?.IDNumber) return;
-
             try {
                 const data = await fetchUserCommunities(profile.IDNumber);
                 // Sort communities alphabetically by name before setting state
@@ -26,7 +25,6 @@ const OtherCommunities = () => {
                 console.error("Failed to load user's communities", err);
             }
         };
-
         loadCommunities();
     }, [profile]);
 

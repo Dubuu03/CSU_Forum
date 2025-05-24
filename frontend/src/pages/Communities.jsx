@@ -25,6 +25,8 @@ const Communities = () => {
     const [selectedTag, setSelectedTag] = useState(null);
     const [topCommunityIds, setTopCommunityIds] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [keyword, setKeyword] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const topics = extractTopics(tagOptions);
     const accessToken = useAuthRedirect();
@@ -43,6 +45,10 @@ const Communities = () => {
                     title="Communities"
                     onOpenSidebar={() => setSidebarOpen(true)}
                     onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
+                    keyword={keyword}
+                    setKeyword={setKeyword}
+                    isSearchOpen={isSearchOpen}
+                    setIsSearchOpen={setIsSearchOpen}
                 />
 
                 {loading ? (
@@ -61,9 +67,10 @@ const Communities = () => {
                             selectedTag={selectedTag}
                             topCommunityIds={topCommunityIds}
                             setLoading={setLoading}
+                            keyword={keyword}
                         />
 
-                        {!selectedTag && (
+                        {!selectedTag && !keyword && (
                             <TopCommunities
                                 setTopCommunityIds={setTopCommunityIds}
                                 setLoading={setLoading}

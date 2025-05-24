@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import CommunityHeader from "../components/Community/CommunityHeader";
 import CommunityTabs from "../components/Community/CommunityTabs";
 import DiscussionList from "../components/Community/DiscussionList";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
 import styles from "../styles/Community/CommunityPage.module.css";
 import {
@@ -16,6 +16,7 @@ import { fetchDiscussionsByCommunity } from "../services/discussionService";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentPictures from "../hooks/Profile/useStudentPictures";
+import { Plus } from "lucide-react";
 
 import Spinner from "../components/Spinner"; // Adjust the path if necessary
 
@@ -31,6 +32,7 @@ const CommunityPage = () => {
   const accessToken = useAuthRedirect();
   const { profile } = useStudentProfile(accessToken);
   const { pictures } = useStudentPictures(accessToken);
+  const navigate = useNavigate();
 
   const [communityData, setCommunityData] = useState(null);
   const [discussions, setDiscussions] = useState([]);
@@ -171,6 +173,14 @@ const CommunityPage = () => {
 
       <CommunityTabs tabs={["Discussions", "Announcements", "Events"]} />
       <DiscussionList discussions={discussions} />
+      {/* Floating plus button */}
+      <button
+        className={styles.fab}
+        onClick={() => navigate(`/discussion/${communityId}`)}
+        aria-label="Create Discussion"
+      >
+        <Plus size={25} />
+      </button>
       <Navbar />
     </div>
   );

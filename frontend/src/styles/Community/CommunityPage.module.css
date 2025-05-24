@@ -108,3 +108,26 @@
   height: 100%;
   object-fit: cover;
 }
+
+.fab {
+  position: fixed;
+  bottom: 80px;
+  right: 32px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #9d0208;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fab:hover {
+  background: #b30010;
+}
