@@ -10,7 +10,9 @@ import CommunityPage from "./pages/CommunityPage";
 import CreateDiscussion from "./pages/CreateDiscussion";
 import UnderDevelopment from "./pages/UnderDevelopment";
 import DiscussionDetailPage from "./pages/DiscussionDetailPage";
+
 import DiscussionFab from "./pages/DiscussionFab ";
+import DiscussionPage from "./pages/DiscussionPage";
 
 import "./App.css";
 
@@ -51,6 +53,7 @@ const App = () => {
         {/* Optional fallback for unmatched routes */}
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<UnderDevelopment />} />
+        <Route path="/discussion-page" element={<DiscussionPage />} />
       </Routes>
     </Router>
   );

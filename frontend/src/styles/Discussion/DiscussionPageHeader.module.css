@@ -1,0 +1,30 @@
+/* DiscussionPageHeader.module.css */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #c9c9c9;
+  background: #f5f7fa;
+  width: 100%;
+  padding: 40px 20px 10px 20px;
+  background-color: transparent;
+}
+.backButton, .searchButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2d72d9;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.backButton:hover, .searchButton:hover {
+  background: #e0eaff;
+}
+.communityName {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #222;
+}
