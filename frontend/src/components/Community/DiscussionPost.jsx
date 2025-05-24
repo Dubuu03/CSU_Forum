@@ -23,6 +23,8 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
     message: "",
     severity: "info"
   });
+  const [upvoters, setUpvoters] = useState(post.upvoters || []);
+  const [downvoters, setDownvoters] = useState(post.downvoters || []);
 
   const tagArray = Array.isArray(post.tags)
     ? post.tags.flatMap(tag => tag.split(",").map(t => t.trim())).filter(t => t)
@@ -36,14 +38,19 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
     }
   };
 
+  // Sync upvoters/downvoters with post prop when it changes (for initial render and navigation)
+  React.useEffect(() => {
+    setUpvoters(post.upvoters || []);
+    setDownvoters(post.downvoters || []);
+  }, [post.upvoters, post.downvoters]);
+
   // Memoize vote status for performance
   const voteStatus = React.useMemo(() => {
     return {
-      isUpvoted: post?.upvoters?.includes(profile?.IDNumber) || false,
-      isDownvoted: post?.downvoters?.includes(profile?.IDNumber) || false
+      isUpvoted: upvoters.includes(profile?.IDNumber),
+      isDownvoted: downvoters.includes(profile?.IDNumber)
     };
-  }, [post, profile?.IDNumber]);
-
+  }, [upvoters, downvoters, profile?.IDNumber]);
   const { isUpvoted, isDownvoted } = voteStatus;
 
   // FIXED: Stop propagation on snackbar close to prevent redirect
@@ -62,15 +69,14 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
     try {
       setVoteLoading(true);
       const updatedDiscussion = await upvoteDiscussion(post._id, profile.IDNumber, accessToken);
-
+      setUpvoters(updatedDiscussion.upvoters || []);
+      setDownvoters(updatedDiscussion.downvoters || []);
       const isNowUpvoted = updatedDiscussion.upvoters?.includes(profile.IDNumber);
-
       setSnackbar({
         open: true,
         message: isNowUpvoted ? "Discussion upvoted!" : "Upvote removed",
         severity: "success"
       });
-
       if (onVoteUpdate) {
         onVoteUpdate(post._id, updatedDiscussion);
       }
@@ -93,15 +99,14 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
     try {
       setVoteLoading(true);
       const updatedDiscussion = await downvoteDiscussion(post._id, profile.IDNumber, accessToken);
-
+      setUpvoters(updatedDiscussion.upvoters || []);
+      setDownvoters(updatedDiscussion.downvoters || []);
       const isNowDownvoted = updatedDiscussion.downvoters?.includes(profile.IDNumber);
-
       setSnackbar({
         open: true,
         message: isNowDownvoted ? "Discussion downvoted" : "Downvote removed",
         severity: "success"
       });
-
       if (onVoteUpdate) {
         onVoteUpdate(post._id, updatedDiscussion);
       }
@@ -200,7 +205,7 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
             e.stopPropagation();
             navigateToDiscussion();
           }}>
-            <MessageCircle size={17 } /> {post.comments}
+            <MessageCircle size={17} /> {post.comments}
           </button>
         </div>
       </div>

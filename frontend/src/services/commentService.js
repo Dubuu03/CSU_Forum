@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/api/comments';
+const API_URL = 'http://localhost:5000/api/comments'; // Use full backend URL for dev
 
 // Create a new comment (top-level or reply)
 const createComment = async (commentData, token) => {
@@ -9,8 +9,7 @@ const createComment = async (commentData, token) => {
             Authorization: `Bearer ${token}`,
         },
     };
-
-    const response = await axios.post(API_URL, commentData, config);
+    const response = await axios.post(`${API_URL}/`, commentData, config);
     return response.data;
 };
 
@@ -33,7 +32,6 @@ const updateComment = async (commentId, content, authorId, token) => {
             Authorization: `Bearer ${token}`,
         },
     };
-
     const response = await axios.put(
         `${API_URL}/${commentId}`,
         { content, authorId },
@@ -50,7 +48,6 @@ const deleteComment = async (commentId, authorId, role, token) => {
         },
         data: { authorId, role } // Pass data in the request body for DELETE
     };
-
     const response = await axios.delete(`${API_URL}/${commentId}`, config);
     return response.data;
 };
@@ -62,7 +59,6 @@ const upvoteComment = async (commentId, userId, token) => {
             Authorization: `Bearer ${token}`,
         },
     };
-
     const response = await axios.post(
         `${API_URL}/${commentId}/upvote`,
         { userId },
@@ -78,7 +74,6 @@ const downvoteComment = async (commentId, userId, token) => {
             Authorization: `Bearer ${token}`,
         },
     };
-
     const response = await axios.post(
         `${API_URL}/${commentId}/downvote`,
         { userId },
@@ -100,7 +95,6 @@ const addReplyToComment = async (commentId, replyData, token) => {
             Authorization: `Bearer ${token}`,
         },
     };
-
     const response = await axios.post(`${API_URL}/${commentId}/reply`, replyData, config);
     return response.data;
 };

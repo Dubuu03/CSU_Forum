@@ -1,9 +1,18 @@
+const mongoose = require('mongoose');
 const Comment = require('../models/Comment');
 const Discussion = require('../models/Discussion');
 
 // Create a new comment
 exports.createComment = async (req, res) => {
     const { content, authorId, authorName, authorImage, parentId, isReply, replyToCommentId } = req.body;
+
+    // Validate parentId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(parentId)) {
+        return res.status(400).json({ message: "Invalid parentId (discussion or comment ID)" });
+    }
+    if (isReply && replyToCommentId && !mongoose.Types.ObjectId.isValid(replyToCommentId)) {
+        return res.status(400).json({ message: "Invalid replyToCommentId" });
+    }
 
     try {
         const newComment = new Comment({

@@ -9,7 +9,6 @@ import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
 import CreateDiscussion from "./pages/CreateDiscussion";
 import UnderDevelopment from "./pages/UnderDevelopment";
-import DiscussionDetailPage from "./pages/DiscussionDetailPage";
 
 import DiscussionFab from "./pages/DiscussionFab ";
 import DiscussionPage from "./pages/DiscussionPage";
@@ -30,7 +29,7 @@ const App = () => {
         <Route path="/discussion/" element={<CreateDiscussion />} />
         <Route
           path="/discussions/:discussionId"
-          element={<DiscussionDetailPage />}
+          element={<DiscussionPage />}
         />
         <Route
           path="/discussions/:communityId"
