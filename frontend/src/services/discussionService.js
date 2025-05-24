@@ -164,3 +164,59 @@ export const updateDiscussion = async (discussionId, updateData, image, accessTo
         throw error;
     }
 };
+
+// Upvote a discussion
+export const upvoteDiscussion = async (discussionId, userId, accessToken) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/discussions/${discussionId}/upvote`,
+            { userId },
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Error upvoting discussion ${discussionId}:`, error);
+        throw error;
+    }
+};
+
+// Downvote a discussion
+export const downvoteDiscussion = async (discussionId, userId, accessToken) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/discussions/${discussionId}/downvote`,
+            { userId },
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Error downvoting discussion ${discussionId}:`, error);
+        throw error;
+    }
+};
+
+// Fetch comments for a discussion
+export const fetchDiscussionComments = async (discussionId, accessToken) => {
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}/comments/discussion/${discussionId}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching comments for discussion ${discussionId}:`, error);
+        throw error;
+    }
+};

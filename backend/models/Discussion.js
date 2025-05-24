@@ -7,12 +7,14 @@ const discussionSchema = new mongoose.Schema({
     image: { type: String },
     authorId: { type: String, required: true },
     authorName: { type: String, required: true },
-    authorImage: { type: String }, 
+    authorImage: { type: String },
     community: { type: mongoose.Schema.Types.ObjectId, ref: "Community", required: true },
     tags: [{ type: String }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
+    upvoters: [{ type: String }], // Store user IDs of those who upvoted
+    downvoters: [{ type: String }], // Store user IDs of those who downvoted
     createdAt: { type: Date, default: Date.now }
 });
 

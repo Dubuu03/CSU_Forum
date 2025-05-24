@@ -114,13 +114,12 @@ const TopCommunities = ({ setTopCommunityIds }) => {
           ))}
         </motion.div>
       )}
-
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={alert.open}
         autoHideDuration={3000}
         onClose={handleAlertClose}
-        sx={{ m: '64px' }}
+        sx={{ mb: "64px" }}
       >
         <Alert onClose={handleAlertClose} severity={alert.severity} sx={{ width: "100%" }}>
           {alert.message}
