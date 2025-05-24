@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
 import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useStudentPictures from "../hooks/Profile/useStudentPictures";
-import { fetchUserCommunities } from "../services/communityService";
+import { fetchUserCommunities, fetchCommunityById } from "../services/communityService";
 import { createDiscussion } from "../services/discussionService";
 import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
@@ -15,10 +15,11 @@ import styles from "../styles/Communities/CreateDiscussion.module.css";
 
 const Alert = (props) => <MuiAlert elevation={6} {...props} />;
 
-const CreateDiscussion = () => {
+const CreateDiscussionFab = () => {
     const accessToken = useAuthRedirect();
     const navigate = useNavigate();
     const location = useLocation();
+    const { communityId } = useParams();
     const { profile, loading: profileLoading, error: profileError } = useStudentProfile(accessToken);
     const { pictures, loading: pictureLoading, error: pictureError } = useStudentPictures(accessToken);
 
@@ -35,6 +36,7 @@ const CreateDiscussion = () => {
     const [communities, setCommunities] = useState([]);
     const [loadingCommunities, setLoadingCommunities] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [communityName, setCommunityName] = useState("");
 
     const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
 
@@ -62,16 +64,15 @@ const CreateDiscussion = () => {
     }, [profile]);
 
     useEffect(() => {
-        // Auto-select community if communityId is in location.state or query params
-        let prefillCommunityId = location.state?.communityId;
-        if (!prefillCommunityId) {
-            const params = new URLSearchParams(location.search);
-            prefillCommunityId = params.get("communityId");
+        // Only set the communityId from the URL param
+        if (communityId) {
+            setPostData((prev) => ({ ...prev, communityId }));
+            // Fetch the community name by id
+            fetchCommunityById(communityId)
+                .then((data) => setCommunityName(data.name || ""))
+                .catch(() => setCommunityName(""));
         }
-        if (prefillCommunityId) {
-            setPostData((prev) => ({ ...prev, communityId: prefillCommunityId }));
-        }
-    }, [location.state, location.search]);
+    }, [communityId]);
 
     const handleChange = (e) => {
         setPostData({ ...postData, [e.target.name]: e.target.value });
@@ -211,21 +212,13 @@ const CreateDiscussion = () => {
                 />
                 <div className={styles.charCount}>{postData.content.length}/500</div>
 
-                <label className={styles.label}>Choose where to post</label>
-                <select
-                    value={postData.communityId}
-                    name="communityId"
-                    onChange={handleChange}
-                    required
+                <label className={styles.label}>Community</label>
+                <input
+                    type="text"
+                    value={communityName}
+                    disabled
                     className={styles.pillSelect}
-                >
-                    <option value="">Select a community</option>
-                    {communities.map((c) => (
-                        <option key={c._id} value={c._id}>
-                            {c.name}
-                        </option>
-                    ))}
-                </select>
+                />
 
                 <label className={styles.label}>Add up to 3 topics that fit your discussion</label>
                 <div className={styles.tagPicker}>
@@ -292,4 +285,4 @@ const CreateDiscussion = () => {
     );
 };
 
-export default CreateDiscussion;
+export default CreateDiscussionFab;

@@ -16,29 +16,38 @@ const OtherCommunities = () => {
     useEffect(() => {
         const loadCommunities = async () => {
             if (!profile?.IDNumber) return;
-
             try {
                 const data = await fetchUserCommunities(profile.IDNumber);
-                setUserCommunities(data);
+                // Sort communities alphabetically by name before setting state
+                const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
+                setUserCommunities(sortedData);
             } catch (err) {
                 console.error("Failed to load user's communities", err);
             }
         };
-
         loadCommunities();
     }, [profile]);
 
     return (
         <div className={styles.otherCommunities}>
-            <span onClick={() => setExpanded((prev) => !prev)} style={{ cursor: "pointer" }}>
+            <span
+                onClick={() => setExpanded((prev) => !prev)}
+                style={{ cursor: "pointer" }}
+            >
                 OTHER COMMUNITIES
-                {expanded ? <ChevronUp size={18} color="#7d7d7d" /> : <ChevronDown size={18} color="#7d7d7d" />}
+                {expanded ? (
+                    <ChevronUp size={18} color="#7d7d7d" />
+                ) : (
+                    <ChevronDown size={18} color="#7d7d7d" />
+                )}
             </span>
 
             {expanded && (
                 <ul className={styles.otherCommunitiesList}>
                     {userCommunities.length === 0 ? (
-                        <li style={{ color: "#888", fontSize: "14px", paddingLeft: "10px" }}>
+                        <li
+                            style={{ color: "#888", fontSize: "14px", paddingLeft: "10px" }}
+                        >
                             No joined communities
                         </li>
                     ) : (

@@ -3,6 +3,7 @@ import CommunityCard from "./CommunityCard";
 import { motion } from "framer-motion";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Spinner from "../Spinner";
 
 import styles from "../../styles/Communities/CommunityCard.module.css";
 import { joinCommunity, fetchUnjoinedCommunities } from "../../services/communityService";
@@ -21,12 +22,13 @@ const shuffleArray = (array) => {
   return arr;
 };
 
-const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
+const DiscoverCommunities = ({ selectedTag, topCommunityIds = [], keyword = "" }) => {
   const accessToken = useAuthRedirect();
   const { profile } = useStudentProfile(accessToken);
   const [communities, setCommunities] = useState([]);
   const [joinedCommunities, setJoinedCommunities] = useState([]);
   const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
+  const [loading, setLoading] = useState(false);
 
   const IMAGE_BASE_URL = "http://localhost:5000/uploads/community/";
 
@@ -41,12 +43,15 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
   useEffect(() => {
     const loadCommunities = async () => {
       if (!profile?.IDNumber) return;
+      setLoading(true);
       try {
         const unjoined = await fetchUnjoinedCommunities(profile.IDNumber);
         setCommunities(unjoined);
       } catch (err) {
         console.error("Failed to fetch unjoined communities", err);
         showAlert("Failed to load communities.", "error");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -68,47 +73,64 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
     }
   };
 
-  // Filter communities by selected tag
-  const filteredByTag = selectedTag
-    ? communities.filter(
+  // Double filtering: filter by tag and keyword if both are present
+  let filtered = communities;
+  if (selectedTag && keyword) {
+    const lowerKeyword = keyword.toLowerCase();
+    filtered = communities.filter(
+      (c) =>
+        Array.isArray(c.tags) &&
+        c.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase()) &&
+        ((c.name && c.name.toLowerCase().includes(lowerKeyword)) ||
+          (c.description && c.description.toLowerCase().includes(lowerKeyword)))
+    );
+  } else if (keyword) {
+    const lowerKeyword = keyword.toLowerCase();
+    filtered = communities.filter(
+      (c) =>
+        (c.name && c.name.toLowerCase().includes(lowerKeyword)) ||
+        (c.description && c.description.toLowerCase().includes(lowerKeyword))
+    );
+  } else if (selectedTag) {
+    filtered = communities.filter(
       (c) =>
         Array.isArray(c.tags) &&
         c.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase())
-    )
-    : communities;
-
+    );
+  }
   // Sort by member count descending
-  const sortedByMembers = [...filteredByTag].sort(
+  const sortedByMembers = [...filtered].sort(
     (a, b) => (b.memberIds?.length || 0) - (a.memberIds?.length || 0)
   );
-
-  // Filter out top communities if no tag selected
-  const filteredCommunities = selectedTag
+  // Filter out top communities if no tag or search
+  const filteredCommunities = (selectedTag || keyword)
     ? sortedByMembers
     : sortedByMembers.filter((c) => !topCommunityIds.includes(c._id));
-
   // Shuffle and slice the communities once per render using useMemo
   const randomizedCommunities = useMemo(() => {
-    return shuffleArray(filteredCommunities).slice(0, 10);
+    return shuffleArray(filteredCommunities).slice(0, 8);
   }, [filteredCommunities]);
-
-  const isTagSelected = Boolean(selectedTag);
+  const isTagOrSearch = Boolean(selectedTag) || Boolean(keyword);
 
   return (
     <div className={styles.discoverSection}>
       <span>Discover Communities</span>
-      {randomizedCommunities.length === 0 ? (
+
+      {(loading && (selectedTag || keyword)) ? (
+        <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+          <Spinner size={20} />
+        </div>
+      ) : randomizedCommunities.length === 0 ? (
         <p className={styles.noCommunitiesText}>No communities found</p>
       ) : (
         <motion.div
-          className={selectedTag ? styles.communityListGridTwoColumns : styles.communityList}
+          className={isTagOrSearch ? styles.communityListGridTwoColumns : styles.communityList}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           drag="x"
-          dragConstraints={selectedTag ? { left: -250, right: 0 } : { left: -1100, right: 0 }}
+          dragConstraints={isTagOrSearch ? { left: -250, right: 0 } : { left: -1100, right: 0 }}
         >
-
           {randomizedCommunities.map((community) => (
             <CommunityCard
               key={community._id}
@@ -124,7 +146,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [] }) => {
               isTopList={false}
               onJoin={handleJoin}
               joined={joinedCommunities.includes(community._id)}
-              isTagSelected={isTagSelected} // pass flag to card if needed
+              isTagSelected={isTagOrSearch}
             />
           ))}
         </motion.div>
