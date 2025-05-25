@@ -73,7 +73,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [], keyword = "" }
     }
   };
 
-  // Double filtering: filter by tag and keyword if both are present
+  // Filtering logic
   let filtered = communities;
   if (selectedTag && keyword) {
     const lowerKeyword = keyword.toLowerCase();
@@ -106,17 +106,20 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [], keyword = "" }
   const filteredCommunities = (selectedTag || keyword)
     ? sortedByMembers
     : sortedByMembers.filter((c) => !topCommunityIds.includes(c._id));
-  // Shuffle and slice the communities once per render using useMemo
+
+  // Limit to 8 if either tag or keyword is present, else 10
   const randomizedCommunities = useMemo(() => {
-    return shuffleArray(filteredCommunities).slice(0, 8);
-  }, [filteredCommunities]);
+    const limit = (selectedTag || keyword) ? 8 : 10;
+    return shuffleArray(filteredCommunities).slice(0, limit);
+  }, [filteredCommunities, selectedTag, keyword]);
+
   const isTagOrSearch = Boolean(selectedTag) || Boolean(keyword);
 
   return (
     <div className={styles.discoverSection}>
       <span>Discover Communities</span>
 
-      {(loading && (selectedTag || keyword)) ? (
+      {(loading && isTagOrSearch) ? (
         <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
           <Spinner size={20} />
         </div>
