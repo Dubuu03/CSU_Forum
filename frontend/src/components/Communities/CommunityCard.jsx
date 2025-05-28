@@ -57,15 +57,17 @@ const CommunityCard = ({
             style={{ cursor: "pointer", opacity: 1 }}
         >
             <div className={styles.communityInfo}>
-                {image ? (
-                    <div className={styles.imageContainer}>
-                        <img src={image} alt={name} className={styles.avatar} />
-                    </div>
-                ) : (
-                    <div className={`${styles.avatar} ${styles.fallbackAvatar}`}>
-                        {name?.charAt(0).toUpperCase()}
-                    </div>
-                )}
+                <div className={styles.imageContainer}>
+                    <img
+                        src={image || "https://csunitee.vercel.app/assets/default-profile-CY5SrjJI.png"}
+                        alt={name}
+                        className={styles.avatar}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://csunitee.vercel.app/assets/default-profile-CY5SrjJI.png";
+                        }}
+                    />
+                </div>
 
                 <div className={styles.communityDetails}>
                     <span>{name}</span>
