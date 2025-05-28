@@ -141,9 +141,15 @@ const DiscussionPost = ({ post, onVoteUpdate }) => {
       </Snackbar>
 
       <div className={styles.userAvatar}>
-        {post.imageSrc && (
-          <img src={post.imageSrc} alt="User" className={styles.avatarImage} />
-        )}
+        <img
+          src={post.imageSrc || "https://csunitee.vercel.app/assets/default-profile-CY5SrjJI.png"}
+          alt="User"
+          className={styles.avatarImage}
+          onError={e => {
+            e.target.onerror = null;
+            e.target.src = "https://csunitee.vercel.app/assets/default-profile-CY5SrjJI.png";
+          }}
+        />
       </div>
 
       <div className={styles.postInfo}>
