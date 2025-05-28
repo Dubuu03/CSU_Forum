@@ -1,8 +1,10 @@
+import CONFIG from "../config";
+
 // services/studentProfileService.js
 
-const STUDENT_PROFILE_ENDPOINT = "https://takay.csucarig.edu.ph/guid/profile";
-const STUDENT_PICTURE_ENDPOINT = "https://takay.csucarig.edu.ph/guid/getStudentPic";
-const STUDENT_COLLEGE_ENDPOINT = "https://takay.csucarig.edu.ph/checkusercollege";
+const STUDENT_PROFILE_ENDPOINT = CONFIG.STUDENT_PROFILE_ENDPOINT;
+const STUDENT_PICTURE_ENDPOINT = CONFIG.STUDENT_PICTURE_ENDPOINT;
+const STUDENT_COLLEGE_ENDPOINT = CONFIG.STUDENT_COLLEGE_ENDPOINT;
 
 // Service for fetching student pictures
 const studentProfileService = {

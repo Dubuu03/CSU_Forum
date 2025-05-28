@@ -1,6 +1,7 @@
 import axios from 'axios';
+import CONFIG from "../config";
 
-const API_URL = 'http://localhost:5000/api/comments'; // Use full backend URL for dev
+const API_URL = `${CONFIG.API_BASE_URL}/api/comments`; // Use full backend URL for dev
 
 // Create a new comment (top-level or reply)
 const createComment = async (commentData, token) => {
