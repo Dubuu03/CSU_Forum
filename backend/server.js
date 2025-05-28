@@ -11,8 +11,9 @@ const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const FRONTEND_URL = process.env.FRONTEND_URL?.split(",").map(url => url.trim());
 
+app.use(cors({ origin: FRONTEND_URL }));
 app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
