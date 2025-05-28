@@ -1,6 +1,7 @@
 import axios from 'axios';
+import CONFIG from '../config';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = `${CONFIG.API_BASE_URL}/api`;
 
 // Create a new discussion post
 export const createDiscussion = async (discussionData, image, accessToken, useJson = false) => {

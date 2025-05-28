@@ -1,0 +1,16 @@
+# Ignore all .env files in root, frontend, and backend
+env/
+.env
+.env.*
+**/.env
+**/.env.*
+frontend/env/
+frontend/.env
+frontend/.env.*
+frontend/**/.env
+frontend/**/.env.*
+backend/env/
+backend/.env
+backend/.env.*
+backend/**/.env
+backend/**/.env.*

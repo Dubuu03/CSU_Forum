@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -12,11 +11,11 @@ const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
 
 app.use("/uploads/", express.static(path.join(__dirname, "uploads")));
 
@@ -25,7 +24,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/communities", communityRoutes);
 app.use("/api/discussions", discussionRoutes);
 app.use("/api/comments", commentRoutes);
-
 
 connectDB();
 const PORT = process.env.PORT || 5000;
