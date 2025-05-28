@@ -11,16 +11,23 @@ const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
 
+// Parse FRONTEND_URL once at startup
+const allowedOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(",").map(url => url.trim())
+    : [];
+
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin) return callback(null, true); // Allow non-browser requests
-        const allowedOrigins = process.env.FRONTEND_URL?.split(",").map(url => url.trim());
-        if (allowedOrigins && allowedOrigins.includes(origin)) {
+        // Allow requests like curl or Postman (no origin)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
-        return callback(new Error("Not allowed by CORS"));
+
+        callback(new Error(`CORS policy: Origin ${origin} not allowed`));
     },
-    credentials: true
+    credentials: true,
 }));
 
 app.use(express.json({ limit: "10mb" }));
