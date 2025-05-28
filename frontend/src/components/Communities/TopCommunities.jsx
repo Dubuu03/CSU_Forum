@@ -19,7 +19,7 @@ const TopCommunities = ({ setTopCommunityIds }) => {
   const [joinedCommunities, setJoinedCommunities] = useState([]);
   const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
 
-  const IMAGE_BASE_URL = "http://localhost:5000/uploads/community/";
+  const IMAGE_BASE_URL = "/community/";
 
   const showAlert = (message, severity = "info") => {
     setAlert({ open: true, message, severity });

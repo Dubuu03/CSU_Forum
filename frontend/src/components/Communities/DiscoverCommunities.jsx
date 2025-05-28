@@ -30,7 +30,7 @@ const DiscoverCommunities = ({ selectedTag, topCommunityIds = [], keyword = "" }
   const [alert, setAlert] = useState({ open: false, message: "", severity: "info" });
   const [loading, setLoading] = useState(false);
 
-  const IMAGE_BASE_URL = "http://localhost:5000/uploads/community/";
+  const IMAGE_BASE_URL = "/community/";
 
   const showAlert = (message, severity = "info") => {
     setAlert({ open: true, message, severity });
