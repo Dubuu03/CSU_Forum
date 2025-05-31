@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
-import authService from "../services/authService";
-import useStudentProfile from "../hooks/Profile/useStudentProfile";
 import useCommunities from "../hooks/Community/useCommunities";
+import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import authService from "../services/authService";
 
 const Communities = () => {
     const accessToken = useAuthRedirect();

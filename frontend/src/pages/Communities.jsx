@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import NavBar from "../components/NavBar";
-import Header from "../components/Header";
-import TopicTagList from "../components/Communities/TopicTagList";
 import DiscoverCommunities from "../components/Communities/DiscoverCommunities";
 import TopCommunities from "../components/Communities/TopCommunities";
-import Sidebar from "../components/Sidebar/Sidebar";
+import TopicTagList from "../components/Communities/TopicTagList";
+import Header from "../components/Header";
+import NavBar from "../components/NavBar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
+import Sidebar from "../components/Sidebar/Sidebar";
 import Spinner from "../components/Spinner";
 
-import styles from "../styles/Communities/Communities.module.css";
 import { tagOptions } from "../constants/tagOptions";
 import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
+import styles from "../styles/Communities/Communities.module.css";
 
 const extractTopics = (options) => {
     if (!Array.isArray(options)) return [];

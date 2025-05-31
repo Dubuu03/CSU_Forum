@@ -1,12 +1,12 @@
+import { Alert, Snackbar } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
-import useStudentProfile from "../hooks/Profile/useStudentProfile";
-import useStudentPictures from "../hooks/Profile/useStudentPictures";
-import { createCommunity } from "../services/communityService";
-import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
-import { Snackbar, Alert } from "@mui/material";
+import { tagOptions } from "../constants/tagOptions";
+import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
+import useStudentPictures from "../hooks/Profile/useStudentPictures";
+import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import { createCommunity } from "../services/communityService";
 import styles from "../styles/Communities/CreateCommunities.module.css";
 
 const CreateCommunity = () => {
