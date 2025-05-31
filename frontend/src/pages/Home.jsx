@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import clubActivities from "../assets/club-activities.png";
+import profile from "../assets/default-profile.png";
+import discussion from "../assets/discussion-sample.png";
+import eventImage from "../assets/events-sample.png";
+import projName from "../assets/proj-name.png";
 import Header from "../components/Header";
-import NavBar from "../components/NavBar";
+import CampusMap from "../components/Home/CampusMap";
+import ClubActivities from "../components/Home/ClubActivities";
 import FeaturedEvents from "../components/Home/FeaturedEvents";
 import LatestAnnouncements from "../components/Home/LatestAnnouncements";
 import RecentDiscussions from "../components/Home/RecentDiscussions";
-import ClubActivities from "../components/Home/ClubActivities";
-import Sidebar from "../components/Sidebar/Sidebar";
+import NavBar from "../components/NavBar";
 import ProfileSidebar from "../components/Profile/ProfileSidebar";
-import CampusMap from "../components/Home/CampusMap";
+import Sidebar from "../components/Sidebar/Sidebar";
 import styles from "../styles/Home/Home.module.css";
-import projName from "../assets/proj-name.png";
-import eventImage from "../assets/events-sample.png";
-import discussion from "../assets/discussion-sample.png";
-import profile from "../assets/default-profile.png";
-import clubActivities from "../assets/club-activities.png";
 
+// Sample data for featured events
 const event = [
     {
         title: "University Meet 2025",
@@ -36,6 +37,7 @@ const event = [
     },
 ];
 
+// Sample data for latest announcements
 const announcementData = [
     {
         date: "7 June 2025",
@@ -57,6 +59,7 @@ const announcementData = [
     },
 ];
 
+// Sample data for recent discussions
 const discussionData = [
     {
         title: "Election 2025",
@@ -85,9 +88,9 @@ const discussionData = [
         message: "Boo Quiboloy!",
         profileSrc: profile,
     },
-
 ];
 
+// Sample data for club activities
 const activityData = [
     {
         title: "Art Club Exhibition",
@@ -118,30 +121,56 @@ const activityData = [
     },
 ];
 
+// Link for campus map location
 const campusMapData = "https://maps.app.goo.gl/matSesDRNYDgxg7H6";
 
 const Home = () => {
+    // State to manage main sidebar open/close
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    // State to manage profile sidebar open/close
     const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
+
     return (
         <div className={styles.mainContainer}>
+            {/* Sidebar for main navigation */}
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-            <ProfileSidebar isOpen={isProfileSidebarOpen} onClose={() => setProfileSidebarOpen(false)} />
+
+            {/* Sidebar for profile actions */}
+            <ProfileSidebar
+                isOpen={isProfileSidebarOpen}
+                onClose={() => setProfileSidebarOpen(false)}
+            />
+
+            {/* Main content container */}
             <div className={styles.contentContainer}>
+                {/* Header with logo and sidebar toggles */}
                 <Header
                     logo={projName}
                     onOpenSidebar={() => setSidebarOpen(true)}
                     onOpenProfileSidebar={() => setProfileSidebarOpen(true)}
                 />
+
+                {/* Featured events section with sample event data */}
                 <FeaturedEvents events={event} />
+
+                {/* Latest announcements section */}
                 <LatestAnnouncements announcements={announcementData} />
+
+                {/* Recent discussions section */}
                 <RecentDiscussions discussions={discussionData} />
+
+                {/* Club activities section */}
                 <ClubActivities activities={activityData} />
+
+                {/* Campus map section with external map link */}
                 <CampusMap mapLink={campusMapData} />
             </div>
+
+            {/* Bottom navigation bar */}
             <NavBar />
         </div>
     );
-}
+};
 
 export default Home;
