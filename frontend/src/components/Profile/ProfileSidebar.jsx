@@ -1,8 +1,7 @@
-import React from "react";
 import { motion } from "framer-motion";
+import styles from "../../styles/Slider/ProfileSidebar.module.css";
 import ProfileHeader from "./ProfileHeader";
 import ProfileMenu from "./ProfileMenu";
-import styles from "../../styles/Slider/ProfileSidebar.module.css";
 
 const ProfileSidebar = ({ isOpen, onClose }) => {
   return (

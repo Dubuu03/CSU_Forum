@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
-import useStudentProfile from "../hooks/Profile/useStudentProfile";
-import useStudentPictures from "../hooks/Profile/useStudentPictures";
-import { fetchUserCommunities } from "../services/communityService";
-import { createDiscussion } from "../services/discussionService";
-import { tagOptions } from "../constants/tagOptions";
 import BtnBack from "../components/BtnBack";
 import Spinner from "../components/Spinner";
+import { tagOptions } from "../constants/tagOptions";
+import useAuthRedirect from "../hooks/Auth/useAuthRedirect";
+import useStudentPictures from "../hooks/Profile/useStudentPictures";
+import useStudentProfile from "../hooks/Profile/useStudentProfile";
+import { fetchUserCommunities } from "../services/communityService";
+import { createDiscussion } from "../services/discussionService";
 import styles from "../styles/Communities/CreateDiscussion.module.css";
 
 const Alert = (props) => <MuiAlert elevation={6} {...props} />;
@@ -156,7 +156,7 @@ const CreateDiscussion = () => {
 
             if (result._id) {
                 showAlert("Post submitted successfully!", "success");
-                setTimeout(() => navigate("/home"), 1500);
+                setTimeout(() => navigate(`/communities/${postData.communityId}`), 1500);
             } else {
                 throw new Error("Failed to create post");
             }

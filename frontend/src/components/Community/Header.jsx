@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { ChevronLeft, Search, CircleUserRound } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import styles from "../../styles/Header.module.css";
+import { AnimatePresence, motion } from "framer-motion";
+import { CircleUserRound, Search } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../../styles/Header.module.css";
 
 const Header = ({ onOpenProfileSidebar }) => {
     const navigate = useNavigate();
@@ -12,7 +12,6 @@ const Header = ({ onOpenProfileSidebar }) => {
     return (
         <header className={styles.header}>
             <div className={styles.pageInfo}>
-                <ChevronLeft color="#f1f1f1" size={28} onClick={() => navigate(-1)} />
                 <AnimatePresence mode="wait">
                     {isSearchOpen ? (
                         <motion.input

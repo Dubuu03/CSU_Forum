@@ -106,3 +106,52 @@
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
+
+.profilePicContainer {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  cursor: pointer; /* Add pointer cursor for interaction */
+  transition: transform 0.3s ease; /* Smooth transition */
+  position: relative; /* Ensure it stays centered */
+}
+
+/* Profile Sidebar Styling */
+.profilePicContainer {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  cursor: pointer; /* Add pointer cursor for interaction */
+}
+
+.profilePic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+/* Zoomed Image and Overlay */
+.zoomedProfilePicContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7); /* Optional background for the zoomed image */
+  z-index: 102;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zoomedProfilePic {
+  width: 70vw; /* Adjust width as per your need */
+  height: 70vw; /* Make height equal to width to maintain the circle */
+  border-radius: 70%; /* Keep the image circular */
+  object-fit: cover; /* Ensure the image maintains its aspect ratio */
+  cursor: pointer;
+}
