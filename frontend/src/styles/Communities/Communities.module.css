@@ -6,6 +6,7 @@
     position: relative;
     overflow-y: hidden; /* Prevent vertical scrolling */
     overflow-x: hidden;
+    height: 200%;
 }
 
 .contentContainer {
@@ -15,4 +16,7 @@
     padding: 3rem 2rem;
     flex-grow: 1;
     gap: 1.4rem;
+    overflow-y: auto; 
+    overflow-x: hidden;
+
 }

@@ -102,12 +102,32 @@ a {
 
 .otherCommunities {
     width: 100%;
-    height: auto;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem 0;
     border-bottom: 1px solid #c9c9c9;
+    height: auto;
+}
+
+.label {
+    background: transparent;
+    position: static;
+    top: unset;
+    z-index: unset;
+    padding-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.otherCommunitiesList {
+    list-style-type: none;
+    overflow-y: auto;
+    max-height: 260px;
+    padding: 0;
+    margin: 0;
 }
 
 .otherCommunities span {
@@ -116,8 +136,4 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.otherCommunitiesList {
-    list-style-type: none;
 }
